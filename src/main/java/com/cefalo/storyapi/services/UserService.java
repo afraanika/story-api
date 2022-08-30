@@ -2,6 +2,7 @@ package com.cefalo.storyapi.services;
 
 import java.util.Optional;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +25,16 @@ public class UserService {
 		if (user.isPresent())	return user;
 		return Optional.empty();
 	}
-	
+
 //	public Optional<User> getUserByEmail(String email) {
 //		Optional<User> user = userRepository.findByEmail(email);
 //		if (user.isPresent())	return user;
 //		return Optional.empty();
 //	}
-	
+
 	public User addUser(User user) {
 		return userRepository.save(user);
-		
+
 	}
 	
 	public Optional<User> updateUser(String email, User updatedUser) {
