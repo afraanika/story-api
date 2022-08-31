@@ -2,7 +2,6 @@ package com.cefalo.storyapi.services;
 
 import java.util.Optional;
 
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,27 +21,32 @@ public class UserService {
 	
 	public Optional<User> getUserById(int id) {
 		Optional<User> user = userRepository.findById(id);
-		return user;
+		if (user.isPresent())	return user;
+		return Optional.empty();
 	}
 	
-	public Optional<User> getUserByEmail(String email) {
-		Optional<User> user = userRepository.findByEmail(email);
-		if(user.isEmpty()) { return Optional.empty(); }
-		return user;
-	}
+//	public Optional<User> getUserByEmail(String email) {
+//		Optional<User> user = userRepository.findByEmail(email);
+//		if(user.isEmpty()) { return Optional.empty(); }
+//		return user;
+//	}
 	
-	public Optional<User> addUser(User user) {
-		userRepository.save(user);
-		return userRepository.findByEmail(user.getEmail());
+	public User addUser(User user) {
+		return userRepository.save(user);
+		
 	}
 	
 	public Optional<User> updateUser(String email, User updatedUser) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if(user.isEmpty()) return Optional.empty();
 		user.ifPresent(u -> { 
-			u.setEmail(updatedUser.getEmail());
-			u.setPassword(updatedUser.getPassword());
-			});
+			if (!updatedUser.getEmail().isEmpty()) {
+				u.setEmail(updatedUser.getEmail());
+			}
+			if (!updatedUser.getPassword().isEmpty()) {
+				u.setPassword(updatedUser.getPassword());
+			}
+		});
 		userRepository.save(user.get());
 		return user;
 	}
