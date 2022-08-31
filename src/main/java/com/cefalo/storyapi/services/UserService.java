@@ -27,8 +27,8 @@ public class UserService {
 	
 //	public Optional<User> getUserByEmail(String email) {
 //		Optional<User> user = userRepository.findByEmail(email);
-//		if(user.isEmpty()) { return Optional.empty(); }
-//		return user;
+//		if (user.isPresent())	return user;
+//		return Optional.empty();
 //	}
 	
 	public Optional<User> updateUser(String email, User updatedUser) {
