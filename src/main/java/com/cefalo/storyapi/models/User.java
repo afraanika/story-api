@@ -22,10 +22,9 @@ public class User {
 	@NotNull
 	private String name;
 	@NotNull 
-	private String phoneNumber;
-	@Column(unique = true)
+	private String number;
+	@Column(unique = true, nullable=false)
 	@Email(message = "Email not valid", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE)
-	@NotNull(message = "Empty email not accepted")
 	private String email;
 	@Pattern(message = "Password not valid", regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9@$!%*?#&]{8,}")
 	@NotNull(message = "Empty password not accepted")
@@ -36,10 +35,10 @@ public class User {
 		
 	}
 	
-	public User(int id, String name, String phoneNumber, String email, String password, LocalDate created_Date) {
+	public User(int id, String name, String number, String email, String password, LocalDate created_Date) {
 		this.id = id;
 		this.name = name;
-		this.phoneNumber = phoneNumber;
+		this.number = number;
 		this.email = email;
 		this.password = password;
 		this.created_Date = created_Date;
@@ -57,11 +56,12 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getNumber() {
+		return number;
 	}
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
 	public String getEmail() {
 		return email;

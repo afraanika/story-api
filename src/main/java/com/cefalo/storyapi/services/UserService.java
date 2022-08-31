@@ -39,7 +39,7 @@ public class UserService {
 				u.setName(updatedUser.getName());
 			}
 			if (!updatedUser.getPassword().isEmpty()) {
-				u.setPhoneNumber(updatedUser.getPhoneNumber());
+				u.setNumber(updatedUser.getNumber());
 			}
 		});
 		userRepository.save(user.get());
