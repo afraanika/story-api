@@ -31,11 +31,6 @@ public class UserService {
 //		return Optional.empty();
 //	}
 
-	public User addUser(User user) {
-		return userRepository.save(user);
-
-	}
-	
 	public Optional<User> updateUser(String email, User updatedUser) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if(user.isEmpty()) return Optional.empty();
