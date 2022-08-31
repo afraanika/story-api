@@ -39,15 +39,6 @@ public class UserController {
 //	public User getUserByEmail(@RequestParam(value="email")  String email) {
 //		return userService.getUserByEmail(email);
 //	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<User> addUser (@RequestBody User user) {
-		try {
-			return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		}
-	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{email}")
 	public ResponseEntity<Optional<User>> updateUser(@PathVariable String email, @RequestBody User user) {
