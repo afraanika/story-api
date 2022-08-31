@@ -1,14 +1,10 @@
 package com.cefalo.storyapi.controllers;
 
 import java.util.Optional;
-import java.util.function.Consumer;
-
-import javax.persistence.Id;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.HeadersBuilder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +25,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Iterable<User>> getAllUsers() {
 		Iterable<User> users = userService.getAllUsers();
-		if (users.iterator().hasNext()) return ResponseEntity.ok(users);
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		return ResponseEntity.ok(users);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}") 
@@ -46,11 +41,11 @@ public class UserController {
 //	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Optional<User>> addUser (@RequestBody User user) {
+	public ResponseEntity<User> addUser (@RequestBody User user) {
 		try {
 			return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 	}
 	
