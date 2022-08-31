@@ -35,6 +35,12 @@ public class UserService {
 			if (!updatedUser.getPassword().isEmpty()) {
 				u.setPassword(updatedUser.getPassword());
 			}
+			if (!updatedUser.getName().isEmpty()) {
+				u.setName(updatedUser.getName());
+			}
+			if (!updatedUser.getPassword().isEmpty()) {
+				u.setPhoneNumber(updatedUser.getPhoneNumber());
+			}
 		});
 		userRepository.save(user.get());
 		return user;

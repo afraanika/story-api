@@ -19,6 +19,10 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	@NotNull
+	private String name;
+	@NotNull 
+	private String phoneNumber;
 	@Column(unique = true)
 	@Email(message = "Email not valid", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE)
 	@NotNull(message = "Empty email not accepted")
@@ -32,8 +36,10 @@ public class User {
 		
 	}
 	
-	public User(int id, String email, String password, LocalDate created_Date) {
+	public User(int id, String name, String phoneNumber, String email, String password, LocalDate created_Date) {
 		this.id = id;
+		this.name = name;
+		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.password = password;
 		this.created_Date = created_Date;
@@ -44,6 +50,18 @@ public class User {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 	public String getEmail() {
 		return email;
