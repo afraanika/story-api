@@ -20,16 +20,16 @@ public class AuthController {
 	private AuthService authService;
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signup")
-	public ResponseEntity<Optional<User>> addUser (@RequestBody User user) {
+	public ResponseEntity<? extends Object> addUser (@RequestBody User user) {
 		try {
 			return new ResponseEntity<>(authService.addUser(user), HttpStatus.CREATED);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage().toString());
 		}
 	} 
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signin")
-	public ResponseEntity<Optional<User>> checkUser(@RequestBody User user) {
+	public ResponseEntity<? extends Object> checkUser(@RequestBody User user) {
 		Optional<User> userOptional = authService.checkUser(user);
 		if(userOptional.isPresent()) return ResponseEntity.ok(userOptional);
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

@@ -24,12 +24,6 @@ public class UserService {
 		if (user.isPresent())	return user;
 		return Optional.empty();
 	}
-
-//	public Optional<User> getUserByEmail(String email) {
-//		Optional<User> user = userRepository.findByEmail(email);
-//		if (user.isPresent())	return user;
-//		return Optional.empty();
-//	}
 	
 	public Optional<User> updateUser(int id, User updatedUser) {
 		Optional<User> user = userRepository.findById(id);
@@ -40,6 +34,12 @@ public class UserService {
 			}
 			if (!updatedUser.getPassword().isEmpty()) {
 				u.setPassword(updatedUser.getPassword());
+			}
+			if (!updatedUser.getName().isEmpty()) {
+				u.setName(updatedUser.getName());
+			}
+			if (!updatedUser.getPassword().isEmpty()) {
+				u.setNumber(updatedUser.getNumber());
 			}
 		});
 		userRepository.save(user.get());
