@@ -35,9 +35,11 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
-//	@RequestMapping(method = RequestMethod.GET) 
-//	public User getUserByEmail(@RequestParam(value="email")  String email) {
-//		return userService.getUserByEmail(email);
+//	@RequestMapping(method = RequestMethod.GET, value = "/email/{email}") 
+//	public ResponseEntity<Optional<User>> getUserByEmail(@PathVariable  String email) {
+//		Optional<User> user =  userService.getUserByEmail(email);
+//		if(user.isPresent()) return ResponseEntity.ok(user);
+//		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 //	}
 
 	@RequestMapping(method = RequestMethod.POST)
