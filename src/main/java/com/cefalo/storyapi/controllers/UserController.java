@@ -40,11 +40,15 @@ public class UserController {
 //		return userService.getUserByEmail(email);
 //	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/{email}")
-	public ResponseEntity<Optional<User>> updateUser(@PathVariable String email, @RequestBody User user) {
-		Optional<User> userOptional = userService.updateUser(email, user);
-		if (userOptional.isPresent()) return ResponseEntity.ok(userOptional);
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	public ResponseEntity<Optional<User>> updateUser(@PathVariable int id, @RequestBody User user) {
+		Optional<User> userOptional = userService.updateUser(id, user);
+		try {
+			if (userOptional.isPresent()) return ResponseEntity.ok(userOptional);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
