@@ -31,8 +31,8 @@ public class UserService {
 //		return Optional.empty();
 //	}
 	
-	public Optional<User> updateUser(String email, User updatedUser) {
-		Optional<User> user = userRepository.findByEmail(email);
+	public Optional<User> updateUser(int id, User updatedUser) {
+		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) return Optional.empty();
 		user.ifPresent(u -> { 
 			if (!updatedUser.getEmail().isEmpty()) {
