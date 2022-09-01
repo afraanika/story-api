@@ -28,20 +28,18 @@ public class UserService {
 	public Optional<User> updateUser(int id, User updatedUser) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) return Optional.empty();
-		user.ifPresent(u -> { 
-			if (!updatedUser.getEmail().isEmpty()) {
-				u.setEmail(updatedUser.getEmail());
-			}
-			if (!updatedUser.getPassword().isEmpty()) {
-				u.setPassword(updatedUser.getPassword());
-			}
-			if (!updatedUser.getName().isEmpty()) {
-				u.setName(updatedUser.getName());
-			}
-			if (!updatedUser.getPassword().isEmpty()) {
-				u.setNumber(updatedUser.getNumber());
-			}
-		});
+		if (!updatedUser.getEmail().isBlank()) {
+			user.get().setEmail(updatedUser.getEmail());
+		}
+		if (!updatedUser.getPassword().isBlank()) {
+			user.get().setPassword(updatedUser.getPassword());
+		}
+		if (!updatedUser.getName().isBlank()) {
+			user.get().setName(updatedUser.getName());
+		}
+		if (!updatedUser.getPassword().isBlank()) {
+			user.get().setNumber(updatedUser.getNumber());
+		}
 		userRepository.save(user.get());
 		return user;
 	}
