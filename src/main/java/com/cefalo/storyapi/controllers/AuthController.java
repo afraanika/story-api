@@ -21,11 +21,8 @@ public class AuthController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signup")
 	public ResponseEntity<? extends Object> addUser (@RequestBody User user) {
-		try {
-			return new ResponseEntity<>(authService.addUser(user), HttpStatus.CREATED);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage().toString());
-		}
+		User createdUser = authService.addUser(user);
+		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 	} 
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signin")
