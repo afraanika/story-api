@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.UserRepository;
 
@@ -20,7 +21,7 @@ public class AuthService {
 
 	public Optional<User> checkUser(User user) {
 		Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
-		if (userOptional.isEmpty()) return Optional.empty();
+		if (userOptional.isEmpty()) throw new EntityNotFoundException(User.class, "email", user.getEmail());
 		if(userOptional.get().getPassword().equals(user.getPassword())) return userOptional;
 		return Optional.empty();
 	}

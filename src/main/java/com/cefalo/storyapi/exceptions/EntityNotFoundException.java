@@ -10,19 +10,11 @@ import org.springframework.util.StringUtils;
 public class EntityNotFoundException extends RuntimeException {
 	
 	public EntityNotFoundException(Class class1, String... serachParamsMap) {
-		super(EntityNotFoundException.generateMessage(class1.getSimpleName(), toMap(String.class, String.class, serachParamsMap)));
+		super(EntityNotFoundException.generateMessage(class1.getSimpleName(), serachParamsMap[0], serachParamsMap[1]));
 	}
 
-	private static String generateMessage(String entity, Map<String, String> searchParams) {
-		return StringUtils.capitalize(entity) + " not found for " + searchParams;
-	}
-	
-	private static <K, V> Map<K, V> toMap(Class<K> keytype, Class<V> valueType, Object... entries) {
-		if(entries.length % 2 == 1) throw new IllegalArgumentException("Invalid Entries");
-		return IntStream.range(0, entries.length / 2).map(i -> i*2)
-				.collect(HashMap ::  new, 
-						(m, i) -> m.put(keytype.cast(entries[i]), valueType.cast(entries[i+1])), 
-						Map :: putAll);
+	private static String generateMessage(String entity, String key, String value) {
+		return entity + " not found with " + key + " : " + value;
 	}
 	
 }

@@ -19,7 +19,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@Pattern(message = "Not Valid. Please put valid name", regexp = "[A-Za-z\s]+")
+	@Pattern(message = "Not Valid. Please put valid name", regexp = "^[A-Z][A-Za-z\s]*")
 	private String name;
 	
 	@Pattern(message = "Not Valid. Please put valid number", regexp = "[0][1][0-9]{9,10}")

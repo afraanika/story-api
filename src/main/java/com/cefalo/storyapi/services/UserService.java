@@ -28,8 +28,8 @@ public class UserService {
 	
 	public User updateUser(int id, User updatedUser) {
 		Optional<User> user = userRepository.findById(id);
-		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
-		user.ifPresent(u -> setUser(user.get(), updatedUser));
+		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));  
+		setUser(user.get(), updatedUser);
 		userRepository.save(user.get());
 		return user.get();
 	}
