@@ -1,7 +1,5 @@
 package com.cefalo.storyapi.controllers;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,26 +27,18 @@ public class UserController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}") 
 	public ResponseEntity<? extends Object> getUserById(@PathVariable int id) {
-		Optional<User> user = userService.getUserById(id);
-		if(user.isPresent()) return ResponseEntity.ok(user);
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		User user = userService.getUserById(id);
+		return ResponseEntity.ok(user);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<? extends Object> updateUser(@PathVariable int id, @RequestBody User user) {
-		Optional<User> userOptional = userService.updateUser(id, user);
-		try {
-			if (userOptional.isPresent()) return ResponseEntity.ok(userOptional);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage().toString());
-		}
+		User updatedUser = userService.updateUser(id, user);
+		return ResponseEntity.ok(updatedUser);
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<? extends Object> deleteUser(@PathVariable int id) {
-		Optional<User> user = userService.deleteUser(id);
-		if (user.isPresent()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 }

@@ -14,8 +14,8 @@ public class AuthService {
 	@Autowired
 	private UserRepository userRepository; 
 	
-	public User addUser(User user) {
-		return userRepository.save(user);
+	public User addUser(User user) {		
+		return userRepository.save(user);			
 	}
 
 	public Optional<User> checkUser(User user) {
@@ -23,7 +23,6 @@ public class AuthService {
 		if (userOptional.isEmpty()) return Optional.empty();
 		if(userOptional.get().getPassword().equals(user.getPassword())) return userOptional;
 		return Optional.empty();
-		
 	}
 
 }

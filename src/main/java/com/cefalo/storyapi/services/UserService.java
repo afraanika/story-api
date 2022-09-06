@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.UserRepository;
 
@@ -19,34 +20,32 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
-	public Optional<User> getUserById(int id) {
+	public User getUserById(int id) {
 		Optional<User> user = userRepository.findById(id);
-		if (user.isPresent())	return user;
-		return Optional.empty();
+		if (user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+		return user.get();
 	}
 	
-	public Optional<User> updateUser(int id, User updatedUser) {
+	public User updateUser(int id, User updatedUser) {
 		Optional<User> user = userRepository.findById(id);
-		if(user.isEmpty()) return Optional.empty();
-		if (!updatedUser.getEmail().isBlank()) {
-			user.get().setEmail(updatedUser.getEmail());
-		}
-		if (!updatedUser.getPassword().isBlank()) {
-			user.get().setPassword(updatedUser.getPassword());
-		}
-		if (!updatedUser.getName().isBlank()) {
-			user.get().setName(updatedUser.getName());
-		}
-		if (!updatedUser.getPassword().isBlank()) {
-			user.get().setNumber(updatedUser.getNumber());
-		}
+		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+		user.ifPresent(u -> setUser(user.get(), updatedUser));
 		userRepository.save(user.get());
-		return user;
+		return user.get();
 	}
 
-	public Optional<User> deleteUser(int id) {
+	public User deleteUser(int id) {
 		Optional<User> user = userRepository.findById(id);
-		user.ifPresent(u -> userRepository.delete(u));
-		return user;
+		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+		userRepository.delete(user.get());
+		return user.get();
 	}
+	
+	private User setUser(User previousUser, User updatedUser) {
+		previousUser.setEmail(updatedUser.getEmail());
+		previousUser.setPassword(updatedUser.getPassword());
+		previousUser.setName(updatedUser.getName());
+		previousUser.setNumber(updatedUser.getNumber());
+		return previousUser;
+	}                             
 }
