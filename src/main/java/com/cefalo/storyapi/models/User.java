@@ -1,8 +1,13 @@
 package com.cefalo.storyapi.models;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 import javax.validation.constraints.Pattern;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.validation.constraints.Email;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +25,7 @@ public class User {
 	private int id;
 
 	@Pattern(message = "Not Valid. Please put valid name", regexp = "^[A-Z][A-Za-z\s]*")
-	private String name;
+	private String username;
 	
 	@Pattern(message = "Not Valid. Please put valid number", regexp = "[0][1][0-9]{9,10}")
 	private String number;
@@ -40,7 +45,7 @@ public class User {
 
 	public User(int id, String name, String number, String email, String password, LocalDate created_Date) {
 		this.id = id;
-		this.name = name;
+		this.username = name;
 		this.number = number;
 		this.email = email;
 		this.password = password;
@@ -55,14 +60,14 @@ public class User {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getUsername() {
+		return username;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	
+	public void setUsername(String username) {
+		this.username = username;
 	}
-
+	
 	public String getNumber() {
 		return number;
 	}

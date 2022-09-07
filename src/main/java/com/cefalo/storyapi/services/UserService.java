@@ -3,6 +3,9 @@ package com.cefalo.storyapi.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
@@ -34,18 +37,23 @@ public class UserService {
 		return user.get();
 	}
 
-	public User deleteUser(int id) {
+	public void deleteUser(int id) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
 		userRepository.delete(user.get());
-		return user.get();
 	}
+
+	public User loadUserByUsername(String email) {
+		Optional<User> user = userRepository.findByEmail(email);
+		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "email", email);
+		return user.get();
+	} 
 	
 	private User setUser(User previousUser, User updatedUser) {
 		previousUser.setEmail(updatedUser.getEmail());
 		previousUser.setPassword(updatedUser.getPassword());
-		previousUser.setName(updatedUser.getName());
+		previousUser.setUsername(updatedUser.getUsername());
 		previousUser.setNumber(updatedUser.getNumber());
 		return previousUser;
-	}                             
+	}
 }
