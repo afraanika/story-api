@@ -3,6 +3,9 @@ package com.cefalo.storyapi.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
@@ -14,6 +17,9 @@ public class AuthService {
 
 	@Autowired
 	private UserRepository userRepository; 
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	public User addUser(User user) {		
 		return userRepository.save(user);			

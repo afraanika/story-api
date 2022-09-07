@@ -10,25 +10,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cefalo.storyapi.models.JwtResponse;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.services.AuthService;
+import com.cefalo.storyapi.services.JwtService;
 
 @RestController
 public class AuthController {
 	
 	@Autowired
+	private JwtService jwtService;
+	
+	@Autowired
 	private AuthService authService;
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signup")
-	public ResponseEntity<? extends Object> addUser (@RequestBody User user) {
+	public ResponseEntity<? extends Object> addUser (@RequestBody User user) throws Exception {
 		User createdUser = authService.addUser(user);
-		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+		JwtResponse jwtToken = jwtService.authenticate(createdUser);
+		return new ResponseEntity<>(jwtToken, HttpStatus.CREATED);
 	} 
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signin")
-	public ResponseEntity<? extends Object> checkUser(@RequestBody User user) {
+	public ResponseEntity<? extends Object> checkUser(@RequestBody User user) throws Exception {
 		Optional<User> userOptional = authService.checkUser(user);
-		if(userOptional.isPresent()) return ResponseEntity.ok(userOptional);
+		if(userOptional.isPresent()) {
+			JwtResponse jwtToken = jwtService.authenticate(userOptional.get());
+			return ResponseEntity.ok(jwtToken);
+		}
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	}
 
