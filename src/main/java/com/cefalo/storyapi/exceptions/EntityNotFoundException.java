@@ -1,11 +1,5 @@
 package com.cefalo.storyapi.exceptions;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.IntStream;
-
-import org.springframework.util.StringUtils;
-
 @SuppressWarnings("serial")
 public class EntityNotFoundException extends RuntimeException {
 	

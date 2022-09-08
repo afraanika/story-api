@@ -11,12 +11,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.cefalo.storyapi.models.ApiError;
 
 @Component
-public class EntityNotFoundExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<EntityNotFoundException> {
+public class InvalidParameterExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<InvalidParameterException> {
 
 	@Override
-	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity<Object> handleException(EntityNotFoundException e) {
-		ApiError apiError = new ApiError(HttpStatus.NOT_FOUND);
+	@ExceptionHandler(InvalidParameterException.class) 
+	public ResponseEntity<Object> handleException(InvalidParameterException e) {
+		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
 		apiError.setMessage(Arrays.asList(e.getMessage()));
 		return new ResponseEntity<>(apiError, apiError.getStatus());
 	}
