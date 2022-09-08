@@ -1,4 +1,4 @@
-package com.cefalo.storyapi.controllers;
+package com.cefalo.storyapi.exceptions;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
