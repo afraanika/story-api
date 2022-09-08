@@ -8,11 +8,11 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,14 +40,14 @@ public class User implements UserDetails{
 	@NotEmpty(message = "Empty Number not accepted")
 	@Pattern(message = "Not Valid. Please put valid number", regexp = "[0][1][0-9]{9,10}")
 	private String number;
-	
+
 	@NotNull(message = "Null Email not accepted")
 	@NotBlank(message = "Blank Email not accepted")
 	@NotEmpty(message = "Empty Email not accepted")
 	@Column(unique = true)
 	@Email(message = "Not Valid. Please put valid email", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE)
 	private String email;
-	
+
 	@NotNull(message = "Null Password not accepted")
 	@NotBlank(message = "Blank Password not accepted")
 	@NotEmpty(message = "Empty Password not accepted")
