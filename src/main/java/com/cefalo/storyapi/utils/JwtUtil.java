@@ -8,9 +8,8 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-import com.cefalo.storyapi.models.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -45,9 +44,9 @@ public class JwtUtil implements Serializable {
 		return extractExpiration(token).before(new Date(0));
 	}
 
-	public String generateToken(User user) {
+	public String generateToken(UserDetails existingUser) {
 		Map<String, Object> claims = new HashMap<>();
-		return createToken(claims, user.getEmail());
+		return createToken(claims, existingUser.getUsername());
 	}
 
 	private String createToken(Map<String, Object> claims, String subject) {
@@ -56,8 +55,8 @@ public class JwtUtil implements Serializable {
 	            .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
 	}
 	
-	public Boolean validateToken(String token, User user) {
+	public Boolean validateToken(String token, UserDetails user) {
 		final String email = extractEmail(token);
-		return (email.equals(user.getEmail()) && !isTokenExpired(token));
+		return (email.equals(user.getUsername()) && !isTokenExpired(token));
 	}
 }

@@ -25,20 +25,20 @@ public class AuthController {
 	private AuthService authService;
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signup")
-	public ResponseEntity<? extends Object> addUser (@RequestBody User user) throws Exception {
+	public ResponseEntity<? extends Object> addUser (@RequestBody User user) {
 		User createdUser = authService.addUser(user);
 		JwtResponse jwtToken = jwtService.authenticate(createdUser);
 		return new ResponseEntity<>(jwtToken, HttpStatus.CREATED);
 	} 
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signin")
-	public ResponseEntity<? extends Object> checkUser(@RequestBody User user) throws Exception {
+	public ResponseEntity<? extends Object> checkUser(@RequestBody User user) {
 		Optional<User> userOptional = authService.checkUser(user);
 		if(userOptional.isPresent()) {
 			JwtResponse jwtToken = jwtService.authenticate(userOptional.get());
 			return ResponseEntity.ok(jwtToken);
 		}
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		return new ResponseEntity<>("Incorrect Email or Password", HttpStatus.UNAUTHORIZED);
 	}
 
 }
