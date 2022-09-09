@@ -11,11 +11,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.cefalo.storyapi.models.ApiError;
 
 @Component
-public class InvalidParameterExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<InvalidParameterException> {
+public class PasswordNotValidExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<PasswordNotValidException> {
 
 	@Override
-	@ExceptionHandler(InvalidParameterException.class) 
-	public ResponseEntity<Object> handleException(InvalidParameterException e) {
+	@ExceptionHandler(PasswordNotValidException.class) 
+	public ResponseEntity<Object> handleException(PasswordNotValidException e) {
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
 		apiError.setMessage(Arrays.asList(e.getMessage()));
 		return new ResponseEntity<>(apiError, apiError.getStatus());
