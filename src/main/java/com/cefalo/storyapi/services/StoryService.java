@@ -25,26 +25,26 @@ public class StoryService {
 	
 	@Autowired
 	private StoryConverterUtil storyConverterUtil;
-	
+
 	public Iterable<StoryDTO> getAllStories() {
 		Iterable<Story> stories = storyRepository.findAll();
 		return storyConverterUtil.iterableStoryDTO(stories);
 	}
-	
+
 	public StoryDTO getStoryById(Integer id) {
 		Optional<Story> story = storyRepository.findById(id);
 		if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
 		return storyConverterUtil.entityToDTO(story.get());
 	}
-	
+
 	public StoryDTO addStory(Story story) {
 		story.setUser(currentUserService.getUser());
-		return storyConverterUtil.entityToDTO(storyRepository.save(story));			
+		return storyConverterUtil.entityToDTO(storyRepository.save(story));
 	}
 	
 	public StoryDTO updateStory(Integer id, Story updatedStory) {
 		Optional<Story> story = storyRepository.findById(id);
-		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id)); 
+		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
 		isValid(story.get().getId(), currentUserService.getUser().getId());
 		setStory(story.get(), updatedStory);
 		return storyConverterUtil.entityToDTO(storyRepository.save(story.get()));
