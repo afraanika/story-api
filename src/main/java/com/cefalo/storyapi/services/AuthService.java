@@ -34,7 +34,7 @@ public class AuthService {
 	public Optional<User> checkUser(User user) {
 		Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
 		if (userOptional.isEmpty()) throw new EntityNotFoundException(User.class, "email", user.getEmail());
-		if (passwordEncoder.matches(userOptional.get().getPassword(), user.getPassword())) return userOptional;
+		if (passwordEncoder.matches(user.getPassword(), userOptional.get().getPassword())) return userOptional;
 		return Optional.empty();
 	}
 

@@ -1,6 +1,7 @@
 package com.cefalo.storyapi.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.cefalo.storyapi.models.JwtResponse;
@@ -14,12 +15,11 @@ public class JwtService {
 	private JwtUtil jwtUtil;
 	
 	@Autowired
-	private UserService userService;
+	private UserDetailsServiceImp userDetailsServiceImp;
 	
-	public JwtResponse authenticate(User user) throws Exception {
-		
-		final User user1 = (User) userService.loadUserByUsername(user.getEmail());
-		final String token = jwtUtil.generateToken(user1);
+	public JwtResponse authenticate(User user)  {
+		final UserDetails existingUser = userDetailsServiceImp.loadUserByUsername(user.getEmail());
+		final String token = jwtUtil.generateToken(existingUser);
 		
 		return new JwtResponse(token);
 	}
