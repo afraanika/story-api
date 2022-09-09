@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
-import com.cefalo.storyapi.exceptions.InvalidParameterException;
+import com.cefalo.storyapi.exceptions.PasswordNotValidException;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.UserRepository;
 import com.cefalo.storyapi.utils.PasswordValidationUtil;
@@ -25,7 +25,7 @@ public class AuthService {
 	private PasswordValidationUtil passwordValidationUtil;
 	
 	public User addUser(User user) {	
-		if(!passwordValidationUtil.passwordValidator(user.getPassword())) throw new InvalidParameterException(
+		if(!passwordValidationUtil.passwordValidator(user.getPassword())) throw new PasswordNotValidException(
 				"Password", "Not Valid. Please put valid password : must contain one capital letter, one small letter and one number");
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
