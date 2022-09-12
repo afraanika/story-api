@@ -20,7 +20,7 @@ public class Story {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@NotNull(message = "Null Title no accepted")
 	@NotBlank(message = "Blank Title no accepted")
@@ -43,7 +43,7 @@ public class Story {
 		
 	}
 
-	public Story(int id, @NotNull @NotBlank @NotEmpty String tittle, @NotNull @NotBlank @NotEmpty String description,
+	public Story(Integer id, @NotNull @NotBlank @NotEmpty String tittle, @NotNull @NotBlank @NotEmpty String description,
 			User user, LocalDate created_Date) {
 		super();
 		this.id = id;
@@ -54,11 +54,11 @@ public class Story {
 		this.created_Date = created_Date;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

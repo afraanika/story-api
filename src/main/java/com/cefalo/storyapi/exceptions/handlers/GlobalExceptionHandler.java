@@ -1,4 +1,4 @@
-package com.cefalo.storyapi.exceptions;
+package com.cefalo.storyapi.exceptions.handlers;
 
 import java.util.Arrays;
 
@@ -11,14 +11,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.cefalo.storyapi.models.ApiError;
 
 @Component
-public class AccessDeniedExceptionHandler  extends ResponseEntityExceptionHandler implements RestExceptionHandler<AccessDeniedException> {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<Exception> {
 
 	@Override
-	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<Object> handleException(AccessDeniedException e) {
-		ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED);
+	@ExceptionHandler(Exception.class) 
+	public ResponseEntity<Object> handleException(Exception e) {
+		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
 		apiError.setMessage(Arrays.asList(e.getMessage()));
 		return new ResponseEntity<>(apiError, apiError.getStatus());
 	}
-
+	
 }

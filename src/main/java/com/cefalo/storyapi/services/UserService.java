@@ -3,14 +3,14 @@ package com.cefalo.storyapi.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.cefalo.storyapi.exceptions.AccessDeniedException;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.User;
+import com.cefalo.storyapi.models.UserDTO;
 import com.cefalo.storyapi.repositories.UserRepository;
+import com.cefalo.storyapi.utils.UserConverterUtil;
 
 
 @Service
@@ -19,27 +19,36 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public Iterable<User> getAllUsers() {
-		return userRepository.findAll();
+	@Autowired
+	private CurrentUserService currentUserService;
+	
+	@Autowired
+	private UserConverterUtil userConverterUtil;
+	
+	public Iterable<UserDTO> getAllUsers() {
+		Iterable<User> allUsers = userRepository.findAll();
+		return userConverterUtil.iterableUserDTO(allUsers);
+		
 	}
 	
-	public User getUserById(int id) {
+	public UserDTO getUserById(Integer id) {
 		Optional<User> user = userRepository.findById(id);
 		if (user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
-		return user.get();
+		return userConverterUtil.entityToDTO(user.get());
 	}
 	
-	public User updateUser(int id, User updatedUser) {
+	public UserDTO updateUser(Integer id, User updatedUser) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));  
+		isValidate(user.get());
 		setUser(user.get(), updatedUser);
-		userRepository.save(user.get());
-		return user.get();
+		return userConverterUtil.entityToDTO(userRepository.save(user.get()));
 	}
 
-	public void deleteUser(int id) {
+	public void deleteUser(Integer id) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+		isValidate(user.get());
 		userRepository.delete(user.get());
 	} 
 	
@@ -49,5 +58,11 @@ public class UserService {
 		previousUser.setName(updatedUser.getName());
 		previousUser.setNumber(updatedUser.getNumber());
 		return previousUser;
+	}
+	
+	private boolean isValidate(User updatedUser) {
+		if(!(updatedUser.getId().equals(currentUserService.getUser().getId())))
+			throw new AccessDeniedException(User.class);
+		return true;
 	}
 }

@@ -16,6 +16,7 @@ import com.cefalo.storyapi.services.AuthService;
 import com.cefalo.storyapi.services.JwtService;
 
 @RestController
+@RequestMapping(path = "${apiPrefix}")
 public class AuthController {
 	
 	@Autowired

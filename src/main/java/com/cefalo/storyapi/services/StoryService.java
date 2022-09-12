@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import com.cefalo.storyapi.exceptions.AccessDeniedException;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.Story;
+import com.cefalo.storyapi.models.StoryDTO;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.StoryRepository;
+import com.cefalo.storyapi.utils.StoryConverterUtil;
 
 @Service
 public class StoryService {
@@ -20,47 +22,49 @@ public class StoryService {
 	@Autowired
 	private CurrentUserService currentUserService;
 	
-	public Iterable<Story> getAllStories() {
-		return storyRepository.findAll();
+	@Autowired
+	private StoryConverterUtil storyConverterUtil;
+	
+	public Iterable<StoryDTO> getAllStories() {
+		Iterable<Story> stories = storyRepository.findAll();
+		return storyConverterUtil.iterableStoryDTO(stories);
 	}
 	
-	public Story getStoryById(int id) {
+	public StoryDTO getStoryById(Integer id) {
 		Optional<Story> story = storyRepository.findById(id);
 		if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
-		return story.get();
+		return storyConverterUtil.entityToDTO(story.get());
 	}
 	
-	public Story addStory(Story story) {
+	public StoryDTO addStory(Story story) {
 		story.setUser(currentUserService.getUser());
-		return storyRepository.save(story);			
+		return storyConverterUtil.entityToDTO(storyRepository.save(story));			
 	}
 	
-	public Story updateStory(int id, Story updatedStory) {
+	public StoryDTO updateStory(Integer id, Story updatedStory) {
 		Optional<Story> story = storyRepository.findById(id);
 		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id)); 
-		userAccessValidation(story.get());
+		isValidate(story.get());
 		setStory(story.get(), updatedStory);
-		storyRepository.save(story.get());
-		return story.get();
+		return storyConverterUtil.entityToDTO(storyRepository.save(story.get()));
 	}
 
-	public Story deleteStory(int id) {
+	public void deleteStory(Integer id) {
 		Optional<Story> story = storyRepository.findById(id);
 		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
-		userAccessValidation(story.get());
+		isValidate(story.get());
 		storyRepository.delete(story.get());
-		return story.get();
 	}
 	
 	private Story setStory(Story previousStory, Story updatedStory) {
 		previousStory.setTittle(updatedStory.getTittle());
 		previousStory.setDescription(updatedStory.getDescription());
-		previousStory.setUser(updatedStory.getUser());
 		return previousStory;
 	}   
 
-	private void userAccessValidation(Story story) {
-		if(!(story.getUser().getId() == currentUserService.getUser().getId()))
-			throw new AccessDeniedException(User.class, story.getTittle());
+	private boolean isValidate(Story story) {
+		if(!(story.getUser().getId().equals(currentUserService.getUser().getId())))
+			throw new AccessDeniedException(User.class);
+		return true;
 	}
 }

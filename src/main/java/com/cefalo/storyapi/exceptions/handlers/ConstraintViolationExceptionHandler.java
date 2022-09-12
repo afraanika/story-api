@@ -1,4 +1,4 @@
-package com.cefalo.storyapi.exceptions;
+package com.cefalo.storyapi.exceptions.handlers;
 
 import java.util.ArrayList;
 import java.util.List;

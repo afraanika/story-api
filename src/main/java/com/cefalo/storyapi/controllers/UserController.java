@@ -10,35 +10,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cefalo.storyapi.models.User;
+import com.cefalo.storyapi.models.UserDTO;
 import com.cefalo.storyapi.services.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(path = "${apiPrefix}/users")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Iterable<User>> getAllUsers() {
-		Iterable<User> users = userService.getAllUsers();
+	public ResponseEntity<Iterable<UserDTO>> getAllUsers() {
+		Iterable<UserDTO> users = userService.getAllUsers();
 		return ResponseEntity.ok(users);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}") 
-	public ResponseEntity<? extends Object> getUserById(@PathVariable int id) {
-		User user = userService.getUserById(id);
+	public ResponseEntity<? extends Object> getUserById(@PathVariable Integer id) {
+		UserDTO user = userService.getUserById(id);
 		return ResponseEntity.ok(user);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-	public ResponseEntity<? extends Object> updateUser(@PathVariable int id, @RequestBody User user) {
-		User updatedUser = userService.updateUser(id, user);
+	public ResponseEntity<? extends Object> updateUser(@PathVariable Integer id, @RequestBody User user) {
+		UserDTO updatedUser = userService.updateUser(id, user);
 		return ResponseEntity.ok(updatedUser);
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-	public ResponseEntity<? extends Object> deleteUser(@PathVariable int id) {
+	public ResponseEntity<? extends Object> deleteUser(@PathVariable Integer id) {
 		userService.deleteUser(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
