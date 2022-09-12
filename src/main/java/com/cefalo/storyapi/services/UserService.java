@@ -63,7 +63,7 @@ public class UserService {
 		previousUser.setNumber(updatedUser.getNumber());
 		return previousUser;
 	}
-	
+
 	private boolean isValidate(Integer userId, Integer currentUserId) {
 		if(userId.equals(currentUserId)) return true;
 		throw new AccessDeniedException(User.class);

@@ -22,6 +22,9 @@ public class SecurityConfiguration {
 	
 	@Autowired
 	private JwtFilter jwtFilter;
+	
+	@Value("${apiPrefix}")
+	private String apiVersion;
 
 	@Value("${apiPrefix}")
 	private String apiVersion;
