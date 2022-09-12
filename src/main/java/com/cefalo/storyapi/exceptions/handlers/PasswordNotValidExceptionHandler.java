@@ -1,4 +1,4 @@
-package com.cefalo.storyapi.exceptions;
+package com.cefalo.storyapi.exceptions.handlers;
 
 import java.util.Arrays;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.cefalo.storyapi.exceptions.PasswordNotValidException;
 import com.cefalo.storyapi.models.ApiError;
 
 @Component

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.cefalo.storyapi.exceptions.AccessDeniedException;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.UserRepository;
@@ -28,6 +29,7 @@ public class CurrentUserService {
 	}
 	
 	private String currentUsername() {
+		if (!authenticationFacade.getAuthentication().isAuthenticated()) throw new AccessDeniedException(User.class);
 		Authentication authentication = authenticationFacade.getAuthentication();
 		return authentication.getName();
 	}

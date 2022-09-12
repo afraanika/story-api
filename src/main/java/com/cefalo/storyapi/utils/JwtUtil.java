@@ -16,6 +16,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
+@SuppressWarnings("deprecation")
 @Component
 public class JwtUtil implements Serializable {
 	

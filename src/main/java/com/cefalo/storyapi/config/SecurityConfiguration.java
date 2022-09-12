@@ -1,6 +1,7 @@
 package com.cefalo.storyapi.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,17 +21,19 @@ public class SecurityConfiguration {
 	
 	@Autowired
 	private JwtFilter jwtFilter;
+	
+	@Value("${apiPrefix}")
+	private String apiVersion;
 
 	@Bean
 	protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
 			http	
 			.csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/signin", "/signup").permitAll()
+			.antMatchers(apiVersion + "/signin", apiVersion + "/signup").permitAll()
 			.and()
 			.authorizeRequests()
-			.antMatchers(HttpMethod.GET, "/stories/**")
-			.permitAll()
+			.antMatchers(HttpMethod.GET, apiVersion + "/stories/**", apiVersion + "/users/**").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -20,13 +20,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "users")
 public class User implements UserDetails{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 
 	@NotNull(message = "Null Name not accepted")
 	@NotBlank(message = "Blank Name not accepted")
@@ -58,7 +59,7 @@ public class User implements UserDetails{
 
 	}
 
-	public User(int id, String name, String number, String email, String password, LocalDate created_Date) {
+	public User(Integer id, String name, String number, String email, String password, LocalDate created_Date) {
 		this.id = id;
 		this.name = name;
 		this.number = number;
@@ -67,11 +68,11 @@ public class User implements UserDetails{
 		this.created_Date = created_Date;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -127,25 +128,21 @@ public class User implements UserDetails{
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 }
