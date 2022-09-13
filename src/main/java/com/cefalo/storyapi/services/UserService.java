@@ -8,13 +8,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.cefalo.storyapi.dto.UserDTO;
 import com.cefalo.storyapi.exceptions.AccessDeniedException;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.UserRepository;
 import com.cefalo.storyapi.utils.UserConverterUtil;
-
-import dto.UserDTO;
 
 
 @Service
@@ -44,7 +43,7 @@ public class UserService {
 	public UserDTO updateUser(Integer id, User updatedUser) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));  
-		isValidate(user.get());
+		isValidate(user.get().getId(), currentUserService.getUser().getId());
 		setUser(user.get(), updatedUser);
 		return userConverterUtil.entityToDTO(userRepository.save(user.get()));
 	}
@@ -52,7 +51,7 @@ public class UserService {
 	public void deleteUser(Integer id) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
-		isValidate(user.get());
+		isValidate(user.get().getId(), currentUserService.getUser().getId());
 		userRepository.delete(user.get());
 	} 
 	

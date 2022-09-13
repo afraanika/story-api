@@ -5,9 +5,8 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Component;
 
+import com.cefalo.storyapi.dto.UserDTO;
 import com.cefalo.storyapi.models.User;
-
-import dto.UserDTO;
 
 @Component
 public class UserConverterUtil {
