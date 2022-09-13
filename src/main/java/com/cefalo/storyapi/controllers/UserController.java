@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cefalo.storyapi.models.User;
-import com.cefalo.storyapi.models.UserDTO;
 import com.cefalo.storyapi.services.UserService;
 
 import dto.UserDTO;
