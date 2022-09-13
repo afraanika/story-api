@@ -44,7 +44,7 @@ public class UserService {
 	public UserDTO updateUser(Integer id, User updatedUser) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));  
-		isValidate(user.get().getId(), currentUserService.getUser().getId());
+		isValidate(user.get());
 		setUser(user.get(), updatedUser);
 		return userConverterUtil.entityToDTO(userRepository.save(user.get()));
 	}
@@ -52,7 +52,7 @@ public class UserService {
 	public void deleteUser(Integer id) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
-		isValidate(user.get().getId(), currentUserService.getUser().getId());
+		isValidate(user.get());
 		userRepository.delete(user.get());
 	} 
 	
