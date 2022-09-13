@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import com.cefalo.storyapi.exceptions.AccessDeniedException;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.Story;
-import com.cefalo.storyapi.models.StoryDTO;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.StoryRepository;
 import com.cefalo.storyapi.utils.StoryConverterUtil;
+
+import dto.StoryDTO;
 
 @Service
 public class StoryService {
@@ -44,7 +45,7 @@ public class StoryService {
 	public StoryDTO updateStory(Integer id, Story updatedStory) {
 		Optional<Story> story = storyRepository.findById(id);
 		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id)); 
-		isValidate(story.get());
+		isValid(story.get().getId(), currentUserService.getUser().getId());
 		setStory(story.get(), updatedStory);
 		return storyConverterUtil.entityToDTO(storyRepository.save(story.get()));
 	}
@@ -52,7 +53,7 @@ public class StoryService {
 	public void deleteStory(Integer id) {
 		Optional<Story> story = storyRepository.findById(id);
 		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
-		isValidate(story.get());
+		isValid(story.get().getId(), currentUserService.getUser().getId());
 		storyRepository.delete(story.get());
 	}
 	
@@ -62,9 +63,8 @@ public class StoryService {
 		return previousStory;
 	}   
 
-	private boolean isValidate(Story story) {
-		if(!(story.getUser().getId().equals(currentUserService.getUser().getId())))
-			throw new AccessDeniedException(User.class);
-		return true;
+	private boolean isValid(Integer userId, Integer currentUserId) {
+		if(userId.equals(currentUserId))	return true;
+		throw new AccessDeniedException(User.class);
 	}
 }
