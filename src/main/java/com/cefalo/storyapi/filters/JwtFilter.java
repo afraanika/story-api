@@ -16,14 +16,17 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.cefalo.storyapi.models.User;
+import com.cefalo.storyapi.exceptions.AccessDeniedException;
+import com.cefalo.storyapi.exceptions.AuthorizationHeaderNotValidException;
 import com.cefalo.storyapi.services.UserDetailsServiceImp;
-import com.cefalo.storyapi.services.UserService;
 import com.cefalo.storyapi.utils.JwtUtil;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 	
+	final String AUTHORIZE_HEADER = "Authorization";
+	
+	final String TOKEN_PREFIX = "Bearer ";
 	@Autowired
 	private JwtUtil jwtUtil;
 	
@@ -33,16 +36,15 @@ public class JwtFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		 final String authorizationHeader = request.getHeader("Authorization");
+		 final String authorizationHeader = request.getHeader(AUTHORIZE_HEADER);
 
 		 String email = null;
 	     String jwt = null;
 
-	     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+	     if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
 	    	 jwt = authorizationHeader.substring(7);
-	         email = jwtUtil.extractEmail(jwt);
+	    	 email = jwtUtil.extractEmail(jwt);
 	     }
-
 
 	     if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 	    	 

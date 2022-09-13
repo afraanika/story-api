@@ -3,6 +3,7 @@ package com.cefalo.storyapi.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.cefalo.storyapi.dto.UserDTO;
@@ -25,8 +26,8 @@ public class UserService {
 	@Autowired
 	private UserConverterUtil userConverterUtil;
 	
-	public Iterable<UserDTO> getAllUsers() {
-		Iterable<User> allUsers = userRepository.findAll();
+	public Iterable<UserDTO> getAllUsers(int page, int size) {
+		Iterable<User> allUsers = userRepository.findAll(PageRequest.of(page, size));
 		return userConverterUtil.iterableUserDTO(allUsers);
 		
 	}
