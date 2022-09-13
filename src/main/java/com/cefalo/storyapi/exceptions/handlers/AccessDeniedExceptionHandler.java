@@ -12,7 +12,9 @@ import com.cefalo.storyapi.exceptions.AccessDeniedException;
 import com.cefalo.storyapi.models.ApiError;
 
 @Component
-public class AccessDeniedExceptionHandler  extends ResponseEntityExceptionHandler implements RestExceptionHandler<AccessDeniedException> {
+public class AccessDeniedExceptionHandler
+	extends ResponseEntityExceptionHandler 
+	implements RestExceptionHandler<AccessDeniedException> {
 
 	@Override
 	@ExceptionHandler(AccessDeniedException.class)

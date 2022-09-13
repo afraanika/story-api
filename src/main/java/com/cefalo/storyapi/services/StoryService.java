@@ -5,14 +5,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cefalo.storyapi.dto.StoryDTO;
 import com.cefalo.storyapi.exceptions.AccessDeniedException;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.Story;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.StoryRepository;
 import com.cefalo.storyapi.utils.StoryConverterUtil;
-
-import dto.StoryDTO;
 
 @Service
 public class StoryService {
@@ -63,7 +62,7 @@ public class StoryService {
 		return previousStory;
 	}   
 
-	private boolean isValid(Integer userId, Integer currentUserId) {
+	protected boolean isValid(Integer userId, Integer currentUserId) {
 		if(userId.equals(currentUserId))	return true;
 		throw new AccessDeniedException(User.class);
 	}

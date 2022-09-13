@@ -12,7 +12,9 @@ import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.ApiError;
 
 @Component
-public class EntityNotFoundExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<EntityNotFoundException> {
+public class EntityNotFoundExceptionHandler 
+	extends ResponseEntityExceptionHandler 
+	implements RestExceptionHandler<EntityNotFoundException> {
 
 	@Override
 	@ExceptionHandler(EntityNotFoundException.class)

@@ -35,11 +35,9 @@ public class AuthController {
 	@RequestMapping(method = RequestMethod.POST, value = "/signin")
 	public ResponseEntity<? extends Object> checkUser(@RequestBody User user) {
 		Optional<User> userOptional = authService.checkUser(user);
-		if(userOptional.isPresent()) {
-			JwtResponse jwtToken = jwtService.authenticate(userOptional.get());
-			return ResponseEntity.ok(jwtToken);
-		}
-		return new ResponseEntity<>("Incorrect Email or Password", HttpStatus.UNAUTHORIZED);
+		if(userOptional.isEmpty()) return new ResponseEntity<>("Incorrect Email or Password", HttpStatus.UNAUTHORIZED);
+		JwtResponse jwtToken = jwtService.authenticate(userOptional.get());
+		return ResponseEntity.ok(jwtToken);
 	}
 
 }

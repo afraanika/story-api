@@ -29,7 +29,8 @@ public class CurrentUserService {
 	}
 	
 	private String currentUsername() {
-		if (!authenticationFacade.getAuthentication().isAuthenticated()) throw new AccessDeniedException(User.class);
+		if (!authenticationFacade.getAuthentication().isAuthenticated()) 
+			throw new AccessDeniedException(User.class);
 		Authentication authentication = authenticationFacade.getAuthentication();
 		return authentication.getName();
 	}

@@ -15,7 +15,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.cefalo.storyapi.models.ApiError;
 
 @Component
-public class ConstraintViolationExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<ConstraintViolationException> {
+public class ConstraintViolationExceptionHandler 
+		extends ResponseEntityExceptionHandler 
+		implements RestExceptionHandler<ConstraintViolationException> {
 
 	@Override
 	@ExceptionHandler(ConstraintViolationException.class)

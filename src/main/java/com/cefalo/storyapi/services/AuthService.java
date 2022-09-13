@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.cefalo.storyapi.exceptions.EmailNotUniqueException;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.exceptions.PasswordNotValidException;
 import com.cefalo.storyapi.models.User;
@@ -24,9 +25,9 @@ public class AuthService {
 	@Autowired
 	private PasswordValidationUtil passwordValidationUtil;
 	
-	public User addUser(User user) {	
-		if(!passwordValidationUtil.passwordValidator(user.getPassword())) throw new PasswordNotValidException(
-				"Password", "Not Valid. Please put valid password : must contain one capital letter, one small letter and one number");
+	public User addUser(User user) {
+		if(userRepository.findByEmail(user.getEmail()).isPresent()) throw new EmailNotUniqueException("Email", user.getEmail());
+		if(!passwordValidationUtil.passwordValidator(user.getPassword())) throw new PasswordNotValidException();
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}

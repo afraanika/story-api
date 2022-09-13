@@ -11,14 +11,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.cefalo.storyapi.models.ApiError;
 
 @Component
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<Exception> {
+public class GlobalExceptionHandler 
+		extends ResponseEntityExceptionHandler 
+									implements RestExceptionHandler<Exception> {
 
 	@Override
 	@ExceptionHandler(Exception.class) 
 	public ResponseEntity<Object> handleException(Exception e) {
-		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
+		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR);
 		apiError.setMessage(Arrays.asList(e.getMessage()));
 		return new ResponseEntity<>(apiError, apiError.getStatus());
 	}
-	
 }

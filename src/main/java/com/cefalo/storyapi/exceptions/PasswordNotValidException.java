@@ -3,12 +3,7 @@ package com.cefalo.storyapi.exceptions;
 @SuppressWarnings("serial")
 public class PasswordNotValidException extends RuntimeException {
 	
-	public PasswordNotValidException(String parameter, String message) {
-		super(PasswordNotValidException.generateMessage(parameter, message));
+	public PasswordNotValidException() {
+		super("Password"+ " : " + "Not Valid. Please put valid password : must contain one capital letter, one small letter and one number");
 	}
-
-	private static String generateMessage(String parameter, String message) {
-		return parameter + " : " + message;
-	}
-
 }

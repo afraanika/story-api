@@ -5,13 +5,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cefalo.storyapi.dto.UserDTO;
 import com.cefalo.storyapi.exceptions.AccessDeniedException;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.UserRepository;
 import com.cefalo.storyapi.utils.UserConverterUtil;
-
-import dto.UserDTO;
 
 
 @Service
