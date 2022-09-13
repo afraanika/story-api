@@ -20,7 +20,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "users")
 public class User implements UserDetails{
@@ -44,7 +43,6 @@ public class User implements UserDetails{
 	@NotNull(message = "Null Email not accepted")
 	@NotBlank(message = "Blank Email not accepted")
 	@NotEmpty(message = "Empty Email not accepted")
-	@Column(unique = true)
 	@Email(message = "Not Valid. Please put valid email", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE)
 	private String email;
 

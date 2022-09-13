@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cefalo.storyapi.dto.StoryDTO;
@@ -21,8 +22,8 @@ public class StoryController {
 	private StoryService storyService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Iterable<StoryDTO>> getAllStories() {
-		Iterable<StoryDTO> stories = storyService.getAllStories();
+	public ResponseEntity<Iterable<StoryDTO>> getAllStories(@RequestParam int page, @RequestParam int size) {
+		Iterable<StoryDTO> stories = storyService.getAllStories(page, size);
 		return ResponseEntity.ok(stories);
 	}
 
