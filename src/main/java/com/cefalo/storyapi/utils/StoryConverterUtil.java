@@ -7,20 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cefalo.storyapi.models.Story;
-import com.cefalo.storyapi.models.StoryDTO;
+
+import dto.StoryDTO;
 
 @Component
 public class StoryConverterUtil {
-	
-	@Autowired
-	private UserConverterUtil userConverterUtil;
 	
 	public StoryDTO entityToDTO(Story story) {
 		StoryDTO dto = new StoryDTO();
 		dto.setId(story.getId());
 		dto.setTittle(story.getTittle());
 		dto.setDescription(story.getDescription());
-		dto.setAuthor(userConverterUtil.entityToDTO(story.getUser()));
+		dto.setAuthorName(story.getUser().getEmail());
 		dto.setCreated_Date(story.getCreated_Date());
 		return dto;
 	}

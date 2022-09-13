@@ -1,4 +1,4 @@
-package com.cefalo.storyapi.models;
+package dto;
 
 import java.time.LocalDate;
 
@@ -10,7 +10,7 @@ public class StoryDTO {
 	
 	private String description;
 	
-	private UserDTO author;
+	private String authorName;
 	
 	private LocalDate created_Date;
 
@@ -18,12 +18,12 @@ public class StoryDTO {
 		
 	}
 	
-	public StoryDTO(Integer id, String tittle, String description, UserDTO userDTO, LocalDate created_Date) {
+	public StoryDTO(Integer id, String tittle, String description, String authorName, LocalDate created_Date) {
 		super();
 		this.id = id;
 		this.tittle = tittle;
 		this.description = description;
-		this.author = userDTO;
+		this.authorName = authorName;
 		this.created_Date = created_Date;
 	}
 
@@ -51,12 +51,12 @@ public class StoryDTO {
 		this.description = description;
 	}
 
-	public UserDTO getAuthor() {
-		return author;
+	public String getAuthorName() {
+		return authorName;
 	}
 
-	public void setAuthor(UserDTO userDTO) {
-		this.author = userDTO;
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
 	}
 
 	public LocalDate getCreated_Date() {
