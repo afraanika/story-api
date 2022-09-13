@@ -6,9 +6,8 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.cefalo.storyapi.dto.StoryDTO;
 import com.cefalo.storyapi.models.Story;
-
-import dto.StoryDTO;
 
 @Component
 public class StoryConverterUtil {
