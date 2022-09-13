@@ -1,4 +1,4 @@
-package dto;
+package com.cefalo.storyapi.dto;
 
 import java.time.LocalDate;
 
