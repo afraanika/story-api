@@ -2,6 +2,7 @@ package com.cefalo.storyapi.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,13 +31,14 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}") 
 	public ResponseEntity<? extends Object> getUserById(@PathVariable Integer id) {
 		UserDTO user = userService.getUserById(id);
-		return ResponseEntity.ok(user);
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(user);
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<? extends Object> updateUser(@PathVariable Integer id, @RequestBody User user) {
 		UserDTO updatedUser = userService.updateUser(id, user);
-		return ResponseEntity.ok(updatedUser);
+		return ResponseEntity.status(HttpStatus.OK).body(updatedUser );
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")

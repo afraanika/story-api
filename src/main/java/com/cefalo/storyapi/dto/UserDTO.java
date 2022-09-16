@@ -18,8 +18,14 @@ public class UserDTO {
 		
 	}
 	
+	public UserDTO(Integer id, String name, String number, String email) {
+		this.id = id;
+		this.name = name;
+		this.number = number;
+		this.email = email;
+	}
+	
 	public UserDTO(Integer id, String name, String number, String email, LocalDate created_Date) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.number = number;
