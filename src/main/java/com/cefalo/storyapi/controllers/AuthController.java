@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class AuthController {
 	@Autowired
 	private AuthService authService;
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/signup")
+	@RequestMapping(method = RequestMethod.POST, value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<? extends Object> addUser (@RequestBody User user) {
 		User createdUser = authService.addUser(user);
 		JwtResponse jwtToken = jwtService.authenticate(createdUser);
@@ -35,11 +36,9 @@ public class AuthController {
 	@RequestMapping(method = RequestMethod.POST, value = "/signin")
 	public ResponseEntity<? extends Object> checkUser(@RequestBody User user) {
 		Optional<User> userOptional = authService.checkUser(user);
-		if(userOptional.isPresent()) {
-			JwtResponse jwtToken = jwtService.authenticate(userOptional.get());
-			return ResponseEntity.ok(jwtToken);
-		}
-		return new ResponseEntity<>("Incorrect Email or Password", HttpStatus.UNAUTHORIZED);
+		if(userOptional.isEmpty()) return new ResponseEntity<>("Incorrect Email or Password", HttpStatus.UNAUTHORIZED);
+		JwtResponse jwtToken = jwtService.authenticate(userOptional.get());
+		return ResponseEntity.ok(jwtToken);
 	}
 
 }

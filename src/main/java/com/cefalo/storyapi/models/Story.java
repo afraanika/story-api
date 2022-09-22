@@ -42,15 +42,21 @@ public class Story {
 	public Story() {
 		
 	}
+	
+	public Story(Integer id, String tittle, String description, User user) {
+		this.id = id;
+		this.tittle = tittle;
+		this.user = user;
+		this.description = description;
+	}
 
 	public Story(Integer id, @NotNull @NotBlank @NotEmpty String tittle, @NotNull @NotBlank @NotEmpty String description,
 			User user, LocalDate created_Date) {
 		super();
 		this.id = id;
 		this.tittle = tittle;
-		this.user = user;
 		this.description = description;
-		
+		this.user = user;
 		this.created_Date = created_Date;
 	}
 
