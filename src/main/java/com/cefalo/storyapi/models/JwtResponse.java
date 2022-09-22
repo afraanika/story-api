@@ -5,7 +5,6 @@ public class JwtResponse {
 	private String jwtTokenString;
 	
 	public JwtResponse(String jwtTokenString) {
-		super();
 		this.jwtTokenString = jwtTokenString;
 	}
 

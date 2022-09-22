@@ -19,7 +19,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
 	private UserRepository userRepository;
 	
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "email", email);
 		return (UserDetails) user.get();

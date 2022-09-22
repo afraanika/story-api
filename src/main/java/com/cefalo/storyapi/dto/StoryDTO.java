@@ -18,6 +18,13 @@ public class StoryDTO {
 		
 	}
 	
+	public StoryDTO(Integer id, String tittle, String description, String authorName) {
+		this.id = id;
+		this.tittle = tittle;
+		this.description = description;
+		this.authorName = authorName;
+	}
+	
 	public StoryDTO(Integer id, String tittle, String description, String authorName, LocalDate created_Date) {
 		super();
 		this.id = id;
