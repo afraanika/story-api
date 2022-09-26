@@ -53,9 +53,9 @@ public class UserControllerTest {
 	
 	private MockMvc mockMvc;
 	
-	User user;
+	private User user;
 	
-	UserDTO userDTO;
+	private UserDTO userDTO;
 	
 	@BeforeEach
 	public void setup(){
@@ -123,7 +123,7 @@ public class UserControllerTest {
 	@Test
 	@DisplayName("Put /users/1  - Success")
 	void testUpdateUser() throws Exception {
-		doReturn(userDTO).when(userService).updateUser(eq(user.getId()), any(User.class));
+		doReturn(userDTO).when(userService).updateUser(user.getId(), user);
 	
 		mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/users/{id}", 1)
 		      .contentType(MediaType.APPLICATION_JSON)
@@ -143,7 +143,7 @@ public class UserControllerTest {
 	@DisplayName("Put /users/1  - Not Found")
 	void testUpdateUserNotFound() throws Exception {
 		doThrow(new EntityNotFoundException(User.class, "id", String.valueOf(1)))
-			.when(userService).updateUser(eq(user.getId()), any(User.class));
+			.when(userService).updateUser(user.getId(), user);
 		
 		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/users/{id}", 1)
 			      .contentType(MediaType.APPLICATION_JSON)
@@ -155,7 +155,6 @@ public class UserControllerTest {
 	@Test
 	@DisplayName("Delete /users/1  - Success")
 	void testDeleteUser() throws Exception {
-		
 		doNothing().when(userService).deleteUser(1);
 		
 		this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/users/{id}", 1))
@@ -165,7 +164,6 @@ public class UserControllerTest {
 	@Test
 	@DisplayName("Delete /users/1  - Not Found")
 	void testDeleteUserNotFound() throws Exception {
-		
 		doNothing().when(userService).deleteUser(1);
 		
 		mockMvc.perform(delete("/api/v1/users/{id}", 1))
