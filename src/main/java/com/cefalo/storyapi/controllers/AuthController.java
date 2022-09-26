@@ -21,23 +21,17 @@ import com.cefalo.storyapi.services.JwtService;
 public class AuthController {
 	
 	@Autowired
-	private JwtService jwtService;
-	
-	@Autowired
 	private AuthService authService;
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<? extends Object> addUser (@RequestBody User user) {
-		User createdUser = authService.addUser(user);
-		JwtResponse jwtToken = jwtService.authenticate(createdUser);
+		JwtResponse jwtToken = authService.addUser(user);
 		return new ResponseEntity<>(jwtToken, HttpStatus.CREATED);
 	} 
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signin")
-	public ResponseEntity<? extends Object> checkUser(@RequestBody User user) {
-		Optional<User> userOptional = authService.checkUser(user);
-		if(userOptional.isEmpty()) return new ResponseEntity<>("Incorrect Email or Password", HttpStatus.UNAUTHORIZED);
-		JwtResponse jwtToken = jwtService.authenticate(userOptional.get());
+	public ResponseEntity<? extends Object> validateUser(@RequestBody User user) {
+		JwtResponse jwtToken = authService.validateUser(user);
 		return ResponseEntity.ok(jwtToken);
 	}
 

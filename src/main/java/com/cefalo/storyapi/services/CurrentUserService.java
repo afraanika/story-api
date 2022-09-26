@@ -22,17 +22,15 @@ public class CurrentUserService {
 	private IAuthenticationFacade authenticationFacade;
 	
 	public User getUser() {
-		String email = currentUsername();
+		String email = getCurrentUserEmail();
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isEmpty()) throw new EntityNotFoundException(User.class, "email", email);
 		return user.get();
 	}
 	
-	private String currentUsername() {
+	private String getCurrentUserEmail() {
 		if (!authenticationFacade.getAuthentication().isAuthenticated()) throw new AccessDeniedException(User.class);
 		Authentication authentication = authenticationFacade.getAuthentication();
 		return authentication.getName();
 	}
-	
-	
 }

@@ -1,7 +1,7 @@
 package com.cefalo.storyapi.utils;
 
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Component;
 
@@ -20,10 +20,9 @@ public class StoryConverterUtil {
 		dto.setCreated_Date(story.getCreated_Date());
 		return dto;
 	}
-
-	public Iterable<StoryDTO> iterableStoryDTO(Iterable<Story> stories) {
-		return StreamSupport.stream(stories.spliterator(), false).collect(Collectors.toList()).stream()
-				.map(u -> entityToDTO(u)).collect(Collectors.toList());
+	public List<StoryDTO> iterableStoryDTO(List<Story> stories) {
+		return stories.stream()
+				.map(u -> entityToDTO(u))
+				.collect(Collectors.toList());
 	}
-
 }

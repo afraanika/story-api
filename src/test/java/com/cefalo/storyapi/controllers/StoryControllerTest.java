@@ -50,10 +50,10 @@ public class StoryControllerTest {
 	private ObjectMapper mapper;
 	
 	private MockMvc mockMvc;
-	
-	
-	Story story;
-	StoryDTO storyDTO;
+
+
+	private Story story;
+	private StoryDTO storyDTO;
 	
 	@BeforeEach
 	public void setup(){
@@ -86,7 +86,7 @@ public class StoryControllerTest {
 	
 	@Test
 	@DisplayName("Get /stories  - Not Found")
-	void testGetAllStoriessNotFound() throws Exception {
+	void testGetAllStoriesNotFound() throws Exception {
 		
 		doReturn(List.of())
 			.when(storyService).getAllStories(1, 1);
@@ -122,6 +122,7 @@ public class StoryControllerTest {
 			.andExpect(status().isNotFound());
 	}
 	
+	@Test
 	@DisplayName("Post /stories  - Success")
 	void testAddStory() throws Exception {
 		doReturn(storyDTO).when(storyService).addStory(story);
@@ -143,14 +144,13 @@ public class StoryControllerTest {
 	@Test
 	@DisplayName("Put /stories/1  - Success")
 	void testUpdateStory() throws Exception {
-		doReturn(storyDTO).when(storyService).updateStory(eq(story.getId()), any(Story.class));
+		doReturn(storyDTO).when(storyService).updateStory(story.getId(), story);
 	
 		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/stories/{id}", 1)
 				.contentType(MediaType.APPLICATION_JSON)
 				.characterEncoding("utf-8")
 				.content(asJsonString(story))
 				.accept(MediaType.APPLICATION_JSON))
-
 		    .andExpect(status().isOk())
 		    
 		    .andExpect(jsonPath("$.id", is(1)))
