@@ -27,7 +27,7 @@ public class UserDetailsServiceImpTest {
     private User user;
 
     @BeforeEach
-    public void setup(){
+    public void setUp(){
         user = new User(1, "Billy", "01236547893", "bill@gmail.com", "A2Sa3A1ABSRO");
     }
 

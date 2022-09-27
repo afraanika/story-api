@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +28,8 @@ public class StoryService {
 	private StoryConverterUtil storyConverterUtil;
 
 	public List<StoryDTO> getAllStories(int page, int size) {
-		Page<Story> stories = storyRepository.findAll(PageRequest.of(page, size));
-		return storyConverterUtil.iterableStoryDTO(stories.getContent());
+		List<Story> stories = storyRepository.findAll(PageRequest.of(page, size)).getContent();
+		return storyConverterUtil.iterableStoryDTO(stories);
 	}
 
 	public StoryDTO getStoryById(Integer id) {
@@ -48,7 +47,7 @@ public class StoryService {
 		Optional<Story> story = storyRepository.findById(id);
 		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
 		isValid(story.get().getId(), currentUserService.getUser().getId());
-		setStory(story.get(), updatedStory);
+		setStoryProperties(story.get(), updatedStory);
 		return storyConverterUtil.entityToDTO(storyRepository.save(story.get()));
 	}
 
@@ -59,13 +58,13 @@ public class StoryService {
 		storyRepository.delete(story.get());
 	}
 	
-	private Story setStory(Story previousStory, Story updatedStory) {
+	protected Story setStoryProperties(Story previousStory, Story updatedStory) {
 		previousStory.setTittle(updatedStory.getTittle());
 		previousStory.setDescription(updatedStory.getDescription());
 		return previousStory;
 	}   
 
-	private boolean isValid(Integer userId, Integer currentUserId) {
+	protected boolean isValid(Integer userId, Integer currentUserId) {
 		if(userId.equals(currentUserId))	return true;
 		throw new AccessDeniedException(User.class);
 	}

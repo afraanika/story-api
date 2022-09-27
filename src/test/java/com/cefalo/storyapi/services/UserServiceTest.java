@@ -3,10 +3,12 @@ package com.cefalo.storyapi.services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.cefalo.storyapi.exceptions.AccessDeniedException;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.utils.UserConverterUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,6 +24,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.cefalo.storyapi.dto.UserDTO;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.UserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -35,8 +39,8 @@ public class UserServiceTest {
 	@Autowired
 	private UserService userService;
 
-	@MockBean
-	private UserDetailsServiceImp userDetailsServiceImp;
+	@Autowired
+	private CurrentUserService currentUserService;
 
 	@Autowired
 	private ObjectMapper mapper;
@@ -44,23 +48,23 @@ public class UserServiceTest {
 	private User user;
 
 	@BeforeEach
-	public void setup(){
+	public void setUp(){
 		user = new User(1, "Billy", "01236547893", "bill@gmail.com", "A2Sa3A1ABSRO");
-}
+	}
 
 	@Test
 	@DisplayName("Test GetAllUsers - Success")
-	void testGetAllUsers( ){
+	void shouldReturnUserList( ){
 		doReturn(Arrays.asList(user, user)).when(userRepository).findAll();
 
-		List<UserDTO> users = userService.getAllUsers(1, 2);
+		List<UserDTO> users = userService.getAllUsers();
 
 		Assertions.assertEquals(2, users.size(), "findAll should return 2 users");
 	}
 
 	@Test
 	@DisplayName("Test GetUserById - Found")
-	void testGetUserByIdFound() {
+	void shouldReturnUserWithGivenId() {
 		doReturn(Optional.of(user)).when(userRepository).findById(user.getId());
 
 		UserDTO userDTO = userConverterUtil.entityToDTO(user);
@@ -72,7 +76,7 @@ public class UserServiceTest {
 
 	@Test
 	@DisplayName("Test GetUserById - Not Found")
-	void testGetUserByIdNotFound() {
+	void shouldThrowEntityNotFoundException() {
 		doReturn(Optional.empty()).when(userRepository).findById(1);
 
 		assertThrows(EntityNotFoundException.class, () ->
@@ -82,29 +86,21 @@ public class UserServiceTest {
 
 //	@Test
 //	@DisplayName("Test UpdateUser - Successful")
-//	void testUpdateUser() {
-//		String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiaWxsQGdtYWlsLmNvbSIsImlhdCI6MTY2MzgyNjY3OCwiZXhwIjoxNjYzODYyNjc4fQ.i7aH_-_HICz7TWeVobrv18RvazEmbyLH8QTKXjG8kAQ";
-//		RequestBuilder request = MockMvcRequestBuilders
-//				.post("/api/adverts/category")
-//				.content(asJsonString(user))
-//				.header("Authorization", "Bearer " + jwtToken)
-//				.contentType(MediaType.APPLICATION_JSON_VALUE)
-//				.accept(MediaType.APPLICATION_JSON);
+//	void shouldReturnUpdatedUserDTO() {
+//		User updatedUser = new User(1, "Billy", "01236547893", "billy@gmail.com", "A2Sa3A1ABSRO");
+//		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>()));
 //
-//		doReturn(user).when(userRepository).save(user);
+//		doReturn(Optional.of(updatedUser)).when(userRepository).findById(user.getId());
 //
-//		when(userDetailsServiceImp.loadUserByUsername(user.getUsername())).thenReturn(user);
-//		UserDTO returnedUser = userService.updateUser(user.getId(), user);
+//		UserDTO userDTO = userConverterUtil.entityToDTO(updatedUser);
+//		UserDTO returnedUserDTO = userService.updateUser(user.getId(), user);
 //
-//		ConsoleIOContext.AllSuggestionsCompletionTask mockMvc;
-//		MvcResult mvcResult = mockMvc.perform(request)
-//				.andExpect(status().is2xxSuccessful());
-//
+//		assertEquals(userDTO, returnedUserDTO, "Users should be equal");
 //	}
 
 	@Test
 	@DisplayName("Test UpdateUser - Not Found")
-	void testUpdateUserNotFound() {
+	void shouldThrowEntityNotFoundExceptionWhileUpdating() {
 		doReturn(Optional.empty()).when(userRepository).findById(user.getId());
 
 		assertThrows(EntityNotFoundException.class, () ->
@@ -112,11 +108,58 @@ public class UserServiceTest {
 		, "User Found, when it should not be");
 	}
 
-	private String asJsonString(final Object object){
-		try {
-			return mapper.writeValueAsString(object);
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException("Failed to map obj " + object, e);
-		}
+//	@Test
+//	@DisplayName("Test DeleteUser - Success")
+//	void shouldReturnTrue() {
+//		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>()));
+//
+//		doReturn(Optional.of(user)).when(userRepository).findById(user.getId());
+//
+//		boolean deletedSuccessfully = userService.deleteUser(user.getId());
+//
+//		assertTrue(deletedSuccessfully);
+//	}
+	@Test
+	@DisplayName("Test DeleteUser - Not Found")
+	void shouldThrowEntityNotFoundExceptionWhileDeleting() {
+		doReturn(Optional.empty()).when(userRepository).findById(user.getId());
+
+		assertThrows(EntityNotFoundException.class, () ->
+						userService.deleteUser(user.getId())
+				, "User Found, when it should not be");
 	}
+
+	@Test
+	@DisplayName("Test setUserProperties - Success")
+	void shouldReturnUpdatedUser() {
+		User givenUser = new User(1, "Billy", "01236547893", "billy@gmail.com", "A2Sa3A1ABSRO");
+		User updatedUser = userService.setUserProperties(user, givenUser);
+
+		assertEquals(givenUser, updatedUser, "Users should be equal");
+	}
+
+	@Test
+	@DisplayName("Test isValid - Success")
+	void shouldReturnTrue() {
+		User givenUser = new User(1, "Billy", "01236547893", "billy@gmail.com", "A2Sa3A1ABSRO");
+		boolean isValid = userService.isValid(user.getId(), givenUser.getId());
+
+		assertTrue(isValid);
+	}
+
+	@Test
+	@DisplayName("Test isValid - AccessDenied")
+	void shouldThrowAccessDeniedException() {
+		assertThrows(AccessDeniedException.class,
+				() -> userService.isValid(user.getId(), 2),
+				"Users should not be same");
+	}
+//
+//	private String asJsonString(final Object object){
+//		try {
+//			return mapper.writeValueAsString(object);
+//		} catch (JsonProcessingException e) {
+//			throw new RuntimeException("Failed to map obj " + object, e);
+//		}
+//	}
 }

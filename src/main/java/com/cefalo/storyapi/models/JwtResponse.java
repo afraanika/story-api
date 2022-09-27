@@ -28,6 +28,6 @@ public class JwtResponse {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(jwtTokenString);
+		return Objects.hashCode(jwtTokenString);
 	}
 }

@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
+import com.cefalo.storyapi.filters.JwtFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.cefalo.storyapi.dto.UserDTO;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
-import com.cefalo.storyapi.filters.JwtFilter;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.services.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -72,7 +72,7 @@ public class UserControllerTest {
 	void testGetAllUsers() throws Exception {
 		
 		doReturn(List.of(userDTO))
-			.when(userService).getAllUsers(1, 1);
+			.when(userService).getAllUsers();
 		
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users?page=1&size=1"))
 			.andExpect(status().isOk())
@@ -87,7 +87,7 @@ public class UserControllerTest {
 	void testGetAllUsersNotFound() throws Exception {
 		
 		doReturn(List.of())
-			.when(userService).getAllUsers(1, 1);
+			.when(userService).getAllUsers();
 		
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users?page=1&size=1"))
 			.andExpect(status().isOk());
