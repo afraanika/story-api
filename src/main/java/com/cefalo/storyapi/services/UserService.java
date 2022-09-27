@@ -3,6 +3,7 @@ package com.cefalo.storyapi.services;
 import java.util.List;
 import java.util.Optional;
 
+import com.cefalo.storyapi.utils.UniqueEmailValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,10 +32,13 @@ public class UserService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private UniqueEmailValidationUtil uniqueEmailValidationUtil;
 	
-	public List<UserDTO> getAllUsers(int page, int size) {
-		Page<User> allUsers = userRepository.findAll(PageRequest.of(page, size));
-		return userConverterUtil.iterableUserDTO(allUsers.getContent());
+	public List<UserDTO> getAllUsers() {
+		List<User> allUsers = userRepository.findAll();
+		return userConverterUtil.iterableUserDTO(allUsers);
 
 	}
 	
@@ -45,24 +49,24 @@ public class UserService {
 	}
 	
 	public UserDTO updateUser(Integer id, User updatedUser) {
-		if(userRepository.findByEmail(updatedUser.getEmail()).isPresent() && 
-				!(userRepository.findByEmail(updatedUser.getEmail()).get().getId().equals(id))) 
-			throw new EmailNotUniqueException("Email", updatedUser.getEmail());
 		Optional<User> user = userRepository.findById(id);
-		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));  
+		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+		if(uniqueEmailValidationUtil.emailValidator(id, updatedUser))
+			throw new EmailNotUniqueException("Email", updatedUser.getEmail());
 		isValid(user.get().getId(), currentUserService.getUser().getId());
-		setUser(user.get(), updatedUser);
+		setUserProperties(user.get(), updatedUser);
 		return userConverterUtil.entityToDTO(userRepository.save(user.get()));
 	}
 
-	public void deleteUser(Integer id) {
+	public boolean deleteUser(Integer id) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
 		isValid(user.get().getId(), currentUserService.getUser().getId());
 		userRepository.delete(user.get());
+		return true;
 	} 
 	
-	private User setUser(User previousUser, User updatedUser) {
+	protected User setUserProperties(User previousUser, User updatedUser) {
 		previousUser.setEmail(updatedUser.getEmail());
 		previousUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
 		previousUser.setName(updatedUser.getName());

@@ -61,7 +61,12 @@ public class Story {
 		this.created_Date = created_Date;
 	}
 
-	@Override
+    public Story(String tittle, String description) {
+		this.tittle = tittle;
+		this.description = description;
+	}
+
+    @Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;

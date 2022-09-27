@@ -5,8 +5,6 @@ import java.util.Optional;
 import com.cefalo.storyapi.exceptions.IncorrectEmailOrPasswordException;
 import com.cefalo.storyapi.models.JwtResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +41,8 @@ public class AuthService {
 	public JwtResponse validateUser(User user) {
 		Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
 		if (userOptional.isEmpty()) throw new EntityNotFoundException(User.class, "email", user.getEmail());
-		if (passwordEncoder.matches(user.getPassword(), userOptional.get().getPassword())) return jwtService.authenticate(userOptional.get());
-		throw new IncorrectEmailOrPasswordException();
+		if (!passwordEncoder.matches(user.getPassword(), userOptional.get().getPassword())) throw new IncorrectEmailOrPasswordException();
+		return jwtService.authenticate(userOptional.get());
 	}
 
 }

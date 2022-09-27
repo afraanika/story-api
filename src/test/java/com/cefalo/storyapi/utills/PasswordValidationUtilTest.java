@@ -24,7 +24,7 @@ public class PasswordValidationUtilTest {
     }
 
     @Test
-    @DisplayName("Test PasswordValidor - Success")
+    @DisplayName("Test PasswordValidator - Success")
     void shouldReturnTrue(){
         boolean isPasswordValid = passwordValidationUtil.passwordValidator(user.getPassword());
 

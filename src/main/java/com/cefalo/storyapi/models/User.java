@@ -71,7 +71,15 @@ public class User implements UserDetails{
 		this.created_Date = created_Date;
 	}
 
-	@Override
+    public User(String name, String number, String email, String password) {
+		this.name = name;
+		this.number = number;
+		this.email = email;
+		this.password = password;
+		this.stories = new ArrayList<>();
+	}
+
+    @Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;

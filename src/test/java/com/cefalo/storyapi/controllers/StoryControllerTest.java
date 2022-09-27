@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
+import com.cefalo.storyapi.filters.JwtFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.cefalo.storyapi.dto.StoryDTO;
 import com.cefalo.storyapi.exceptions.EntityNotFoundException;
-import com.cefalo.storyapi.filters.JwtFilter;
 import com.cefalo.storyapi.models.Story;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.services.StoryService;
