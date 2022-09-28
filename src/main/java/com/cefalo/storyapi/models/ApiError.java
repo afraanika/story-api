@@ -25,32 +25,13 @@ public class ApiError {
 		this.status = status;
 	}
 
-	public ApiError(HttpStatus status, Throwable ex) {
-		this();
-		this.status = status;
-		this.message = new ArrayList<>();
-	}
-
-	public ApiError(HttpStatus status, String message, Throwable ex) {
-		this();
-		this.status = status;
-		this.message = new ArrayList<>();
-	}
-
 	public HttpStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(HttpStatus status) {
-		this.status = status;
-	}
 
 	public LocalDateTime getTimestamp() {
 		return timestamp;
-	}
-
-	public void setTimestamp(LocalDateTime timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	public List<String> getMessage() {

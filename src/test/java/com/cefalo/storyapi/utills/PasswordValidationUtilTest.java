@@ -29,6 +29,5 @@ public class PasswordValidationUtilTest {
         boolean isPasswordValid = passwordValidationUtil.passwordValidator(user.getPassword());
 
         assertTrue(isPasswordValid, "Password Not Valid");
-
     }
 }

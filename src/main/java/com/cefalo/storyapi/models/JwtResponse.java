@@ -14,10 +14,6 @@ public class JwtResponse {
 		return jwtTokenString;
 	}
 
-	public void setJwtTokenString(String jwtTokenString) {
-		this.jwtTokenString = jwtTokenString;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

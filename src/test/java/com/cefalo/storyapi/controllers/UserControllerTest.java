@@ -155,7 +155,7 @@ public class UserControllerTest {
 	@Test
 	@DisplayName("Delete /users/1  - Success")
 	void testDeleteUser() throws Exception {
-		doNothing().when(userService).deleteUser(1);
+		doReturn(true).when(userService).deleteUser(1);
 		
 		this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/users/{id}", 1))
 			.andExpect(status().isNoContent());
@@ -164,12 +164,13 @@ public class UserControllerTest {
 	@Test
 	@DisplayName("Delete /users/1  - Not Found")
 	void testDeleteUserNotFound() throws Exception {
-		doNothing().when(userService).deleteUser(1);
+		doReturn(false).when(userService).deleteUser(1);
 		
 		mockMvc.perform(delete("/api/v1/users/{id}", 1))
 			.andExpect(status().isNoContent());
 	}
-	
+
+
 	private String asJsonString(final Object object){
 		try {
 			return mapper.writeValueAsString(object); 

@@ -62,14 +62,6 @@ public class User implements UserDetails{
 		this.stories = new ArrayList<>();
 	}
 
-	public User(Integer id, String name, String number, String email, String password, LocalDate created_Date) {
-		this.id = id;
-		this.name = name;
-		this.number = number;
-		this.email = email;
-		this.password = password;
-		this.created_Date = created_Date;
-	}
 
     public User(String name, String number, String email, String password) {
 		this.name = name;
@@ -93,19 +85,6 @@ public class User implements UserDetails{
 		result = 31 * result + Objects.hashCode(id);
 		result = 31 * result + Objects.hashCode(email);
 		return result;
-	}
-
-	@Override
-	public String toString() {
-		return
-				"id=" + id +
-				", name='" + name + '\'' +
-				", number='" + number + '\'' +
-				", email='" + email + '\'' +
-				", password='" + password + '\'' +
-				", created_Date=" + created_Date +
-				", stories=" + stories
-				;
 	}
 
 	public Integer getId() {
