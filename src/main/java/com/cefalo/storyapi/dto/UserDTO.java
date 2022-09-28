@@ -25,14 +25,6 @@ public class UserDTO {
 		this.number = number;
 		this.email = email;
 	}
-	
-	public UserDTO(Integer id, String name, String number, String email, LocalDate created_Date) {
-		this.id = id;
-		this.name = name;
-		this.number = number;
-		this.email = email;
-		this.created_Date = created_Date;
-	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -48,15 +40,6 @@ public class UserDTO {
 		result = 31 * result + Objects.hashCode(id);
 		result = 31 * result + Objects.hashCode(email);
 		return result;
-	}
-
-	@Override
-	public String toString() {
-		return "id=" + id +
-				", name='" + name + '\'' +
-				", number='" + number + '\'' +
-				", email='" + email + '\'' +
-				", created_Date=" + created_Date;
 	}
 
 	public Integer getId() {

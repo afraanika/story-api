@@ -51,16 +51,6 @@ public class Story {
 		this.description = description;
 	}
 
-	public Story(Integer id, @NotNull @NotBlank @NotEmpty String tittle, @NotNull @NotBlank @NotEmpty String description,
-			User user, LocalDate created_Date) {
-		super();
-		this.id = id;
-		this.tittle = tittle;
-		this.description = description;
-		this.user = user;
-		this.created_Date = created_Date;
-	}
-
     public Story(String tittle, String description) {
 		this.tittle = tittle;
 		this.description = description;

@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import com.cefalo.storyapi.utils.UniqueEmailValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +49,7 @@ public class UserService {
 	public UserDTO updateUser(Integer id, User updatedUser) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
-		if(uniqueEmailValidationUtil.emailValidator(id, updatedUser))
+		if(!uniqueEmailValidationUtil.emailValidator(id,userRepository.findByEmail(updatedUser.getEmail())))
 			throw new EmailNotUniqueException("Email", updatedUser.getEmail());
 		isValid(user.get().getId(), currentUserService.getUser().getId());
 		setUserProperties(user.get(), updatedUser);

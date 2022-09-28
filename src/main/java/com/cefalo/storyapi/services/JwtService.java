@@ -18,7 +18,7 @@ public class JwtService {
 	private UserDetailsServiceImp userDetailsServiceImp;
 	
 	public JwtResponse authenticate(User user)  {
-		final String token = jwtUtil.generateToken((UserDetails) user);
+		final String token = jwtUtil.createToken((UserDetails) user);
 		
 		return new JwtResponse(token);
 	}

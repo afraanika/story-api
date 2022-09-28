@@ -1,19 +1,15 @@
 package com.cefalo.storyapi.utils;
 
 import com.cefalo.storyapi.models.User;
-import com.cefalo.storyapi.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class UniqueEmailValidationUtil {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public boolean emailValidator(Integer id, User updatedUser) {
-        if (userRepository.findByEmail(updatedUser.getEmail()).isPresent() &&
-                !(userRepository.findByEmail(updatedUser.getEmail()).get().getId().equals(id))) return true;
-        return false;
+    public boolean emailValidator(Integer id, Optional<User> existingUser) {
+        return existingUser.isPresent() &&
+                !(existingUser.get().getId().equals(id));
     }
 }

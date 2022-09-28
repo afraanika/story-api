@@ -27,15 +27,6 @@ public class StoryDTO {
 		this.description = description;
 		this.authorName = authorName;
 	}
-	
-	public StoryDTO(Integer id, String tittle, String description, String authorName, LocalDate created_Date) {
-		super();
-		this.id = id;
-		this.tittle = tittle;
-		this.description = description;
-		this.authorName = authorName;
-		this.created_Date = created_Date;
-	}
 
 	@Override
 	public boolean equals(Object o) {
