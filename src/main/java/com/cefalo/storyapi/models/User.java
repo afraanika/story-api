@@ -12,7 +12,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "users")
 public class User implements UserDetails{
