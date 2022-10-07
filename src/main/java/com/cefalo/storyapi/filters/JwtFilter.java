@@ -34,31 +34,37 @@ public class JwtFilter extends OncePerRequestFilter {
 	private UserDetailsServiceImp userDetailsServiceImp;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
-			FilterChain filterChain)
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+									FilterChain filterChain)
 			throws ServletException, IOException {
-		 final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
 
-		 String email = null;
-	     String jwt = null;
+		response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
+		response.setHeader("Access-Control-Max-Age","3600");
+		response.setHeader("Access-Control-Allow-Headers", "Content-Type,Accept, X-Requested-With, remember-me");
 
-	     if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
-	    	 jwt = authorizationHeader.substring(7);
-	         email = jwtUtil.extractEmail(jwt);
-	     }
+		final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
 
-	     if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-	    	 UserDetails user = this.userDetailsServiceImp.loadUserByUsername(email);
-	    	 if (jwtUtil.validateToken(jwt, user)) {
-	    		 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = 
+		String email = null;
+		String jwt = null;
+
+		if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
+	    	jwt = authorizationHeader.substring(7);
+	    	email = jwtUtil.extractEmail(jwt);
+		}
+
+		if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			UserDetails user = this.userDetailsServiceImp.loadUserByUsername(email);
+			if (jwtUtil.validateToken(jwt, user)) {
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
 	    				 new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-	    		 usernamePasswordAuthenticationToken.setDetails(
+				usernamePasswordAuthenticationToken.setDetails(
 	    				 new WebAuthenticationDetailsSource().buildDetails(request));
-	    		 SecurityContextHolder.getContext().setAuthentication(
+				SecurityContextHolder.getContext().setAuthentication(
 	    				 usernamePasswordAuthenticationToken);
-	            }
-	        }
-	        filterChain.doFilter(request, response);
+			}
+		}
+		filterChain.doFilter(request, response);
 	}
-
 }
