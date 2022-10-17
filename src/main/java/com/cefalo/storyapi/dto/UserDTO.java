@@ -1,6 +1,7 @@
 package com.cefalo.storyapi.dto;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class UserDTO {
 
@@ -18,13 +19,27 @@ public class UserDTO {
 		
 	}
 	
-	public UserDTO(Integer id, String name, String number, String email, LocalDate created_Date) {
-		super();
+	public UserDTO(Integer id, String name, String number, String email) {
 		this.id = id;
 		this.name = name;
 		this.number = number;
 		this.email = email;
-		this.created_Date = created_Date;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		UserDTO userDTO = (UserDTO) o;
+		return id.equals(userDTO.id) && email.equals(userDTO.email);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31 * result + Objects.hashCode(id);
+		result = 31 * result + Objects.hashCode(email);
+		return result;
 	}
 
 	public Integer getId() {

@@ -21,5 +21,4 @@ public class EntityNotFoundExceptionHandler extends ResponseEntityExceptionHandl
 		apiError.setMessage(Arrays.asList(e.getMessage()));
 		return new ResponseEntity<>(apiError, apiError.getStatus());
 	}
-
 }

@@ -1,9 +1,10 @@
 package com.cefalo.storyapi.services;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.cefalo.storyapi.utils.UniqueEmailValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,6 @@ import com.cefalo.storyapi.exceptions.EntityNotFoundException;
 import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.repositories.UserRepository;
 import com.cefalo.storyapi.utils.UserConverterUtil;
-
 
 @Service
 public class UserService {
@@ -30,11 +30,13 @@ public class UserService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private UniqueEmailValidationUtil uniqueEmailValidationUtil;
 	
 	public Iterable<UserDTO> getAllUsers() {
 		Iterable<User> allUsers = userRepository.findAll();
 		return userConverterUtil.iterableUserDTO(allUsers);
-		
 	}
 	
 	public UserDTO getUserById(Integer id) {
@@ -44,24 +46,24 @@ public class UserService {
 	}
 	
 	public UserDTO updateUser(Integer id, User updatedUser) {
-		if(userRepository.findByEmail(updatedUser.getEmail()).isPresent() && 
-				!(userRepository.findByEmail(updatedUser.getEmail()).get().getId().equals(id))) 
-			throw new EmailNotUniqueException("Email", updatedUser.getEmail());
 		Optional<User> user = userRepository.findById(id);
-		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));  
-		isValidate(user.get().getId(), currentUserService.getUser().getId());
-		setUser(user.get(), updatedUser);
+		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+		if(!uniqueEmailValidationUtil.emailValidator(id,userRepository.findByEmail(updatedUser.getEmail())))
+			throw new EmailNotUniqueException("Email", updatedUser.getEmail());
+		isValid(user.get().getId(), currentUserService.getUser().getId());
+		setUserProperties(user.get(), updatedUser);
 		return userConverterUtil.entityToDTO(userRepository.save(user.get()));
 	}
 
-	public void deleteUser(Integer id) {
+	public boolean deleteUser(Integer id) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
-		isValidate(user.get().getId(), currentUserService.getUser().getId());
+		isValid(user.get().getId(), currentUserService.getUser().getId());
 		userRepository.delete(user.get());
+		return true;
 	} 
 	
-	private User setUser(User previousUser, User updatedUser) {
+	protected User setUserProperties(User previousUser, User updatedUser) {
 		previousUser.setEmail(updatedUser.getEmail());
 		previousUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
 		previousUser.setName(updatedUser.getName());
@@ -69,7 +71,7 @@ public class UserService {
 		return previousUser;
 	}
 
-	protected boolean isValidate(Integer userId, Integer currentUserId) {
+	protected boolean isValid(Integer userId, Integer currentUserId) {
 		if(userId.equals(currentUserId)) return true;
 		throw new AccessDeniedException(User.class);
 	}

@@ -6,8 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class StoryApiApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    public void main() {
+        StoryApiApplication.main(new String[] {});
+    }
 
 }

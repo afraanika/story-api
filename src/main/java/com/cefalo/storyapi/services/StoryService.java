@@ -1,5 +1,6 @@
 package com.cefalo.storyapi.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class StoryService {
 	@Autowired
 	private StoryConverterUtil storyConverterUtil;
 
-	public Iterable<StoryDTO> getAllStories(int page, int size) {
-		Iterable<Story> stories = storyRepository.findAll(PageRequest.of(page, size));
+	public List<StoryDTO> getAllStories(int page, int size) {
+		List<Story> stories = storyRepository.findAll(PageRequest.of(page, size)).getContent();
 		return storyConverterUtil.iterableStoryDTO(stories);
 	}
 
@@ -46,7 +47,7 @@ public class StoryService {
 		Optional<Story> story = storyRepository.findById(id);
 		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
 		isValid(story.get().getId(), currentUserService.getUser().getId());
-		setStory(story.get(), updatedStory);
+		setStoryProperties(story.get(), updatedStory);
 		return storyConverterUtil.entityToDTO(storyRepository.save(story.get()));
 	}
 
@@ -57,13 +58,13 @@ public class StoryService {
 		storyRepository.delete(story.get());
 	}
 	
-	private Story setStory(Story previousStory, Story updatedStory) {
+	protected Story setStoryProperties(Story previousStory, Story updatedStory) {
 		previousStory.setTittle(updatedStory.getTittle());
 		previousStory.setDescription(updatedStory.getDescription());
 		return previousStory;
 	}   
 
-	private boolean isValid(Integer userId, Integer currentUserId) {
+	protected boolean isValid(Integer userId, Integer currentUserId) {
 		if(userId.equals(currentUserId))	return true;
 		throw new AccessDeniedException(User.class);
 	}

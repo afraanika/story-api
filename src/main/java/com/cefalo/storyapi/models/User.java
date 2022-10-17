@@ -1,24 +1,16 @@
 package com.cefalo.storyapi.models;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
+import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -53,17 +45,45 @@ public class User implements UserDetails{
 	
 	private LocalDate created_Date = LocalDate.now();
 
+	@OneToMany( mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Story> stories;
+
 	public User() {
 
 	}
-
-	public User(Integer id, String name, String number, String email, String password, LocalDate created_Date) {
+	
+	public User(Integer id, String name, String number, String email, String password) {
 		this.id = id;
 		this.name = name;
 		this.number = number;
 		this.email = email;
 		this.password = password;
-		this.created_Date = created_Date;
+		this.stories = new ArrayList<>();
+	}
+
+
+    public User(String name, String number, String email, String password) {
+		this.name = name;
+		this.number = number;
+		this.email = email;
+		this.password = password;
+		this.stories = new ArrayList<>();
+	}
+
+    @Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return id.equals(user.id) && email.equals(user.email);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31 * result + Objects.hashCode(id);
+		result = 31 * result + Objects.hashCode(email);
+		return result;
 	}
 
 	public Integer getId() {
@@ -112,6 +132,14 @@ public class User implements UserDetails{
 
 	public void setCreated_Date(LocalDate created_Date) {
 		this.created_Date = created_Date;
+	}
+
+	public List<Story> getStories() {
+		return stories;
+	}
+
+	public void setStories(List<Story> stories) {
+		this.stories = stories;
 	}
 
 	@Override

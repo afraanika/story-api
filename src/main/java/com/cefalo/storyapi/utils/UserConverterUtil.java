@@ -1,7 +1,7 @@
 package com.cefalo.storyapi.utils;
 
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Component;
 
@@ -20,20 +20,9 @@ public class UserConverterUtil {
 		dto.setCreated_Date(user.getCreated_Date());
 		return dto;
 	}
-
-	public Iterable<UserDTO> iterableUserDTO(Iterable<User> users) {
-		return StreamSupport.stream(users.spliterator(), false).collect(Collectors.toList()).stream()
-				.map(u -> entityToDTO(u)).collect(Collectors.toList());
+	public List<UserDTO> iterableUserDTO(List<User> users) {
+		return users.stream()
+				.map(u -> entityToDTO(u))
+				.collect(Collectors.toList());
 	}
-	
-	public User DTOtoEntity(UserDTO dto) {
-		User user = new User();
-		user.setId(dto.getId());
-		user.setName(dto.getName());
-		user.setNumber(dto.getNumber());
-		user.setEmail(dto.getEmail());
-		user.setCreated_Date(user.getCreated_Date());
-		return user;
-	}
-
 }

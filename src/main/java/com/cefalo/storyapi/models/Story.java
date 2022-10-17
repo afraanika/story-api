@@ -1,6 +1,7 @@
 package com.cefalo.storyapi.models;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,14 +23,14 @@ public class Story {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@NotNull(message = "Null Title no accepted")
-	@NotBlank(message = "Blank Title no accepted")
-	@NotEmpty(message = "Empty Title no accepted")
+	@NotNull(message = "Null Title not accepted")
+	@NotBlank(message = "Blank Title not accepted")
+	@NotEmpty(message = "Empty Title not accepted")
 	private String tittle;
 	
-	@NotNull(message = "Null Description no accepted")
-	@NotBlank(message = "Blank Description no accepted")
-	@NotEmpty(message = "Empty Description no accepted")
+	@NotNull(message = "Null Description not accepted")
+	@NotBlank(message = "Blank Description not accepted")
+	@NotEmpty(message = "Empty Description not accepted")
 	@Column(columnDefinition="TEXT")
 	private String description;
 	
@@ -42,16 +43,33 @@ public class Story {
 	public Story() {
 		
 	}
-
-	public Story(Integer id, @NotNull @NotBlank @NotEmpty String tittle, @NotNull @NotBlank @NotEmpty String description,
-			User user, LocalDate created_Date) {
-		super();
+	
+	public Story(Integer id, String tittle, String description, User user) {
 		this.id = id;
 		this.tittle = tittle;
 		this.user = user;
 		this.description = description;
-		
-		this.created_Date = created_Date;
+	}
+
+    public Story(String tittle, String description) {
+		this.tittle = tittle;
+		this.description = description;
+	}
+
+    @Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Story story = (Story) o;
+		return id.equals(story.id) && user.equals(story.user);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31 * result + Objects.hashCode(id);
+		result = 31 * result + Objects.hashCode(user);
+		return result;
 	}
 
 	public Integer getId() {
