@@ -31,8 +31,8 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	public Iterable<UserDTO> getAllUsers(int page, int size) {
-		Iterable<User> allUsers = userRepository.findAll(PageRequest.of(page, size));
+	public Iterable<UserDTO> getAllUsers() {
+		Iterable<User> allUsers = userRepository.findAll();
 		return userConverterUtil.iterableUserDTO(allUsers);
 		
 	}
