@@ -34,10 +34,9 @@ public class UserService {
 	@Autowired
 	private UniqueEmailValidationUtil uniqueEmailValidationUtil;
 	
-	public List<UserDTO> getAllUsers() {
-		List<User> allUsers = userRepository.findAll();
+	public Iterable<UserDTO> getAllUsers() {
+		Iterable<User> allUsers = userRepository.findAll();
 		return userConverterUtil.iterableUserDTO(allUsers);
-
 	}
 	
 	public UserDTO getUserById(Integer id) {
