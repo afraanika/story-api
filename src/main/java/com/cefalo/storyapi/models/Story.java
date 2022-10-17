@@ -34,7 +34,7 @@ public class Story {
 	private String description;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "author")
 	private User user;
 	
 	private LocalDate created_Date = LocalDate.now();

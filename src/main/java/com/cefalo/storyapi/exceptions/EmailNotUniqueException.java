@@ -6,3 +6,4 @@ public class EmailNotUniqueException extends RuntimeException {
 		super(parameter + " : " + value + " already exists");
 	}
 }
+

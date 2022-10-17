@@ -22,7 +22,8 @@ public class StoryConverterUtil {
 	}
 
 	public Iterable<StoryDTO> iterableStoryDTO(Iterable<Story> stories) {
-		return StreamSupport.stream(stories.spliterator(), false).collect(Collectors.toList()).stream()
+		return StreamSupport.stream(stories.spliterator(), false)
+				.collect(Collectors.toList()).stream()
 				.map(u -> entityToDTO(u)).collect(Collectors.toList());
 	}
 

@@ -1,7 +1,11 @@
 package com.cefalo.storyapi.services;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import com.cefalo.storyapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,9 @@ public class StoryService {
 	
 	@Autowired
 	private StoryRepository storyRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Autowired
 	private CurrentUserService currentUserService;
@@ -63,7 +70,7 @@ public class StoryService {
 		return previousStory;
 	}   
 
-	private boolean isValid(Integer userId, Integer currentUserId) {
+	protected boolean isValid(Integer userId, Integer currentUserId) {
 		if(userId.equals(currentUserId))	return true;
 		throw new AccessDeniedException(User.class);
 	}
