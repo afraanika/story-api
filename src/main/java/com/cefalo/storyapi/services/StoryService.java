@@ -1,7 +1,11 @@
 package com.cefalo.storyapi.services;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import com.cefalo.storyapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,9 @@ public class StoryService {
 	
 	@Autowired
 	private StoryRepository storyRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Autowired
 	private CurrentUserService currentUserService;
@@ -34,6 +41,11 @@ public class StoryService {
 		Optional<Story> story = storyRepository.findById(id);
 		if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
 		return storyConverterUtil.entityToDTO(story.get());
+	}
+
+	public List<StoryDTO> getStoryByAuthor(String email) {
+		List<Story> stories = storyRepository.findAllByUser(Arrays.asList(userRepository.findByEmail(email).get()));
+		return (List<StoryDTO>) storyConverterUtil.iterableStoryDTO(stories);
 	}
 	
 	public StoryDTO addStory(Story story) {
@@ -66,4 +78,6 @@ public class StoryService {
 		if(userId.equals(currentUserId))	return true;
 		throw new AccessDeniedException(User.class);
 	}
+
+
 }

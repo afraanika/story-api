@@ -13,6 +13,8 @@ import com.cefalo.storyapi.dto.StoryDTO;
 import com.cefalo.storyapi.models.Story;
 import com.cefalo.storyapi.services.StoryService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "${apiPrefix}/stories")
 public class StoryController {
@@ -29,6 +31,13 @@ public class StoryController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}") 
 	public ResponseEntity<? extends Object> getStoryById(@PathVariable Integer id) {
 		StoryDTO story = storyService.getStoryById(id);
+		return ResponseEntity.ok(story);
+	}
+
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{email}")
+	public ResponseEntity<? extends Object> getStoryByAuthor(@PathVariable String email) {
+		List<StoryDTO> story = storyService.getStoryByAuthor(email);
 		return ResponseEntity.ok(story);
 	}
 	
@@ -49,5 +58,4 @@ public class StoryController {
 		storyService.deleteStory(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
-
 }
