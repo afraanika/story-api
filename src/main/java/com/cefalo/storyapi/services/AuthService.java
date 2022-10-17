@@ -25,7 +25,7 @@ public class AuthService {
 	@Autowired
 	private PasswordValidationUtil passwordValidationUtil;
 	
-	public User addUser(User user) {
+	public User addUser(User user) {	
 		if(userRepository.findByEmail(user.getEmail()).isPresent()) throw new EmailNotUniqueException("Email", user.getEmail());
 		if(!passwordValidationUtil.passwordValidator(user.getPassword())) throw new PasswordNotValidException();
 		user.setPassword(passwordEncoder.encode(user.getPassword()));

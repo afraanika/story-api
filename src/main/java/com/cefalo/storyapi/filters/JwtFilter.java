@@ -16,9 +16,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.cefalo.storyapi.models.User;
 import com.cefalo.storyapi.services.UserDetailsServiceImp;
-import com.cefalo.storyapi.services.UserService;
 import com.cefalo.storyapi.utils.JwtUtil;
 
 @Component
@@ -37,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 									FilterChain filterChain)
 			throws ServletException, IOException {
-
+      
 		response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.cefalo.storyapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.cefalo.storyapi.dto.StoryDTO;
@@ -31,31 +32,26 @@ public class StoryService {
 	
 	@Autowired
 	private StoryConverterUtil storyConverterUtil;
-	
-	public Iterable<StoryDTO> getAllStories() {
-		Iterable<Story> stories = storyRepository.findAll();
+
+	public Iterable<StoryDTO> getAllStories(int page, int size) {
+		Iterable<Story> stories = storyRepository.findAll(PageRequest.of(page, size));
 		return storyConverterUtil.iterableStoryDTO(stories);
 	}
-	
+
 	public StoryDTO getStoryById(Integer id) {
 		Optional<Story> story = storyRepository.findById(id);
 		if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
 		return storyConverterUtil.entityToDTO(story.get());
 	}
 
-	public List<StoryDTO> getStoryByAuthor(String email) {
-		List<Story> stories = storyRepository.findAllByUser(Arrays.asList(userRepository.findByEmail(email).get()));
-		return (List<StoryDTO>) storyConverterUtil.iterableStoryDTO(stories);
-	}
-	
 	public StoryDTO addStory(Story story) {
 		story.setUser(currentUserService.getUser());
-		return storyConverterUtil.entityToDTO(storyRepository.save(story));			
+		return storyConverterUtil.entityToDTO(storyRepository.save(story));
 	}
 	
 	public StoryDTO updateStory(Integer id, Story updatedStory) {
 		Optional<Story> story = storyRepository.findById(id);
-		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id)); 
+		if(story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
 		isValid(story.get().getId(), currentUserService.getUser().getId());
 		setStory(story.get(), updatedStory);
 		return storyConverterUtil.entityToDTO(storyRepository.save(story.get()));
@@ -78,6 +74,4 @@ public class StoryService {
 		if(userId.equals(currentUserId))	return true;
 		throw new AccessDeniedException(User.class);
 	}
-
-
 }

@@ -10,7 +10,7 @@ import com.cefalo.storyapi.models.Story;
 
 @Component
 public class StoryConverterUtil {
-	
+
 	public StoryDTO entityToDTO(Story story) {
 		StoryDTO dto = new StoryDTO();
 		dto.setId(story.getId());
