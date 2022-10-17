@@ -22,8 +22,8 @@ public class UserController {
 	private UserService userService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Iterable<UserDTO>> getAllUsers() {
-		Iterable<UserDTO> users = userService.getAllUsers();
+	public ResponseEntity<Iterable<UserDTO>> getAllUsers(@RequestParam int page, @RequestParam int size) {
+		Iterable<UserDTO> users = userService.getAllUsers(page, size);
 		return ResponseEntity.ok(users);
 	}
 	
